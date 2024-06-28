@@ -13,17 +13,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "googleServicesFile": "./Config/Firebase/GoogleService-Info.plist",
       "supportsTablet": true,
-      "bundleIdentifier": "com.emacliam.geminilearn"
+      "bundleIdentifier": "com.emacliam.geminilearn",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
-      "googleServicesFile": "./Config/Firebase/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.emacliam.geminilearn"
+      "package": "com.emacliam.geminilearn",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",

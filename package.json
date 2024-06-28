@@ -70,7 +70,7 @@
     "react-native-wheel-of-fortune": "^1.5.4",
     "tailwindcss": "3.3.2",
     "tamagui": "^1.101.3",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

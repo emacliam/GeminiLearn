@@ -1,35 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, XStack, YStack } from 'tamagui';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { Dimensions, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, State } from 'react-native-gesture-handler';
+import database from '@react-native-firebase/database';
+import useChatStore from '@/Storage/Zustand/chat';
 
 const CustomDrawerContent = (props) => {
     const { height } = Dimensions.get('window')
-    const items = [
+    let [chats, setChats] = useState([])
 
 
-    ]
+    useEffect(() => {
+        const onValueChange = database()
+            .ref('/chats')
+            .on('value', snapshot => {
+                const chatsArray = Object.keys(snapshot.val()).map(key => {
+                    return {
+                        ...snapshot.val()[key]
+                    };
+                });
+                setChats(chatsArray)
+            });
+
+        // Stop listening for updates when no longer required
+        return () => database().ref(`/chats`).off('value', onValueChange);
+    }, []);
+
+    const toChat = useChatStore((state) => state.openRecentActivity)
+
+
     return (
         <DrawerContentScrollView {...props} scrollEnabled={false} >
 
 
             <View flexDirection='column' h={height}>
                 <YStack style={{ padding: 20 }} flex={3}>
-                    <Text mb={10} fontFamily={"NunitoBold"} style={{ fontSize: 16 }}>Recent</Text>
+                    <Text mb={10} fontFamily={"NunitoBold"} style={{ fontSize: 16 }}>Recent Conversations</Text>
                     <FlatList
                         contentContainerStyle={{
                             rowGap: 10
                         }}
-                        data={items}
+                        data={chats}
                         renderItem={({ item, index }) => {
+
                             return (
-                                <XStack key={item.id} gap={15} alignItems="center">
-                                    <Ionicons name='chatbox-outline' size={20} />
-                                    <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"}>{item.name}</Text>
-                                </XStack>
+                                <TouchableOpacity onPress={() => {
+                                    const historyArray = Object.keys(item.history).map(key => {
+                                        return {
+                                            ...item.history[key]
+                                        };
+                                    });
+                                    toChat(historyArray)
+                                    //router.replace("/Chat")
+                                }}>
+                                    <XStack key={item.chatId} gap={15} alignItems="center">
+                                        <Ionicons name='chatbox-outline' size={20} />
+                                        <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"}>{item.chatTitle}</Text>
+                                    </XStack>
+                                </TouchableOpacity>
                             )
                         }}
 
@@ -41,6 +72,8 @@ const CustomDrawerContent = (props) => {
                             )
                         }}
                     />
+
+
                 </YStack>
 
                 <YStack style={{ padding: 20 }} gap={15} flex={1} >

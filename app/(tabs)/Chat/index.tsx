@@ -5,7 +5,9 @@ import { Avatar, Text, View } from 'tamagui';
 import { Dimensions } from 'react-native';
 import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
+import database from '@react-native-firebase/database';
 import img from "./gemini.jpg"
+import useChatStore from '@/Storage/Zustand/chat';
 export default function Chat() {
     const inset = useSafeAreaInsets()
     const [messages, setMessages] = useState<IMessage[]>([])
@@ -13,6 +15,14 @@ export default function Chat() {
     const [displayResponse, setDisplayResponse] = useState("");
     const [completedTyping, setCompletedTyping] = useState(false);
     const [chatID, setChatID] = useState(null)
+    const hist = useChatStore((state) => state.history)
+
+    useEffect(() => {
+        if (hist.length > 0) {
+            setMessages(hist)
+        }
+    }, [hist])
+
 
     useEffect(() => {
         if (!messages?.length) {
@@ -35,19 +45,49 @@ export default function Chat() {
 
 
     const saveToFirebase = (message, aiResponse) => {
-        //receive an incoming message
-        //save it to firebase collection
-        // collection name: history
-        // each conversation has an id
-        //generate id and add it to ids list( with "name - which is the first message and the generated id or message id.")
-        if (messages.length == 0) {
-            setChatID(message[0]._id)
-            console.log(message[0]._id)
-        } else {
+        try {
+            if (messages.length == 0) {
+                setChatID(message[0]._id)
+                database()
+                    .ref(`/chats/${message[0]._id}`)
+                    .set({
+                        chatTitle: message[0].text,
+                        chatId: message[0]._id,
+                        history: []
+                    })
+                    .then(() => console.log('Chat Created'));
 
+                saveData(message[0]._id, message, aiResponse)
 
+            } else {
+                saveData(chatID, message, aiResponse)
+            }
+        } catch (error) {
+            console.log(error)
         }
 
+
+    }
+
+
+    const saveData = (messageID, message, aiResponse) => {
+        console.log("ai response", message[0])
+        try {
+            const newReference1 = database().ref(`/chats/${messageID}/history`).push();
+            const newReference2 = database().ref(`/chats/${messageID}/history`).push();
+
+            var promise1 = newReference1.set(message[0])
+            var promise2 = newReference2.set(aiResponse)
+
+            Promise.all([promise1, promise2]).then(() => {
+                console.log("history saved successfully")
+            }).catch((error) => {
+                console.log("Error pushing history", error)
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
@@ -165,7 +205,7 @@ export default function Chat() {
                     </View>
                     <Send {...props} containerStyle={styles.sendWrapperStyle} >
                         <View style={styles.sendContainer}>
-    
+     
                         </View>
                     </Send>
                 </View>
