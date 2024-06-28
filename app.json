@@ -13,13 +13,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "googleServicesFile": "./Config/Firebase/GoogleService-Info.plist",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.emacliam.geminilearn"
     },
     "android": {
+      "googleServicesFile": "./Config/Firebase/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.emacliam.geminilearn"
     },
     "web": {
       "bundler": "metro",
@@ -27,7 +31,22 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow access to your images, to upload."
+        }
+      ],
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

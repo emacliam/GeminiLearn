@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "511574834526",
+    "project_id": "geminilearn-65f2c",
+    "storage_bucket": "geminilearn-65f2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511574834526:android:aca602d6fa18d20294e3cf",
+        "android_client_info": {
+          "package_name": "com.emacliam.geminilearn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmXJr9ESDQlqutMqyi-0exHekcQ8bi258"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

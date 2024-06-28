@@ -6,6 +6,11 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import TextGradient from '@furkankaya/react-native-linear-text-gradient';
+import { TamaguiProvider } from '@tamagui/core';
+import tamaguiConfig from '@/tamagui.config';
+
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -14,6 +19,13 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Nunito: require("../assets/fonts/Nunito/Nunito-VariableFont_wght.ttf"),
+    NunitoRegular: require("../assets/fonts/Nunito/static/Nunito-Regular.ttf"),
+    NunitoBold: require("../assets/fonts/Nunito/static/Nunito-Bold.ttf"),
+    NunitoExtraBold: require("../assets/fonts/Nunito/static/Nunito-ExtraLightItalic.ttf"),
+    NunitoMedium: require("../assets/fonts/Nunito/static/Nunito-Medium.ttf"),
+    NunitoSemiBold: require("../assets/fonts/Nunito/static/Nunito-SemiBold.ttf"),
+    NunitoBlack: require("../assets/fonts/Nunito/static/Nunito-Black.ttf")
   });
 
   useEffect(() => {
@@ -27,11 +39,34 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <GestureHandlerRootView>
+      <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{
+              headerShown: false, headerTitle: () => {
+                return (
+                  <TextGradient
+                    style={{ fontWeight: "bold", fontSize: 25, fontFamily: "NunitoBlack" }}
+                    locations={[0, 1]}
+                    colors={["blue", "red"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    text="Gemini Learn"
+                  />
+                )
+              }
+            }} />
+            <Stack.Screen name="Grammer" options={{ headerShown: false }} />
+            <Stack.Screen name="Writing" options={{ headerShown: false }} />
+            <Stack.Screen name="Reading" options={{ headerShown: false }} />
+            <Stack.Screen name="wheel" options={{ title: "Spinning the wheel", headerShown: true, presentation: "modal" }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </ThemeProvider>
+      </TamaguiProvider>
+
+    </GestureHandlerRootView>
+
   );
 }

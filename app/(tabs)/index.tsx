@@ -1,70 +1,148 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Link, router } from 'expo-router';
+import { StyleSheet, Image, Platform, View, Text, Pressable, StatusBar } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { FadeInRight } from "react-native-reanimated";
+import Carousel from "react-native-reanimated-carousel";
+import { useRef, useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import TextGradient from '@furkankaya/react-native-linear-text-gradient';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+
+
+export default function TabTwoScreen() {
+    const inset = useSafeAreaInsets()
+
+    const [snapDirection, setSnapDirection] = useState<"left" | "right">(
+        "left",
+    );
+    const [pagingEnabled, setPagingEnabled] = useState<boolean>(true);
+    const [snapEnabled, setSnapEnabled] = useState<boolean>(true);
+
+    const [autoPlayReverse, setAutoPlayReverse] = useState<boolean>(false);
+    const data = useRef<number[]>([...new Array(6).keys()]).current;
+    const viewCount = 2;
+
+
+
+    function Card({ name, backgroundColor, href, icon, subtext, img }) {
+        return (
+            <Pressable className="mx-2 flex-1 rounded-2xl   shadow-sm  h-[200px] p-3" style={{ backgroundColor }} onPress={() => {
+                router.push(href)
+            }}>
+                <View >
+                    <View className="rounded-full w-[50px] h-[50px] p-2 justify-center items-center">
+                        <Text className="text-3xl">{img}</Text>
+                    </View>
+                    <ThemedText className="text-lg font-medium text-black" style={{ fontFamily: "NunitoBold" }}>{name}</ThemedText>
+                    <ThemedText type="subtitle" className="text-black text-[15px] font-normal mt-1" style={{ fontFamily: "NunitoRegular" }}>{subtext}</ThemedText>
+                </View>
+            </Pressable>
+        )
+    }
+
+    const cards = [
+        {
+            name: "Grammer",
+            backgroundColor: "white",
+            link: '/Grammer',
+            icon: <MaterialIcons name="abc" color={"blue"} size={40} />,
+            subtext: "Master the essential rules and structure of English grammar.",
+            img: "📚"
+
+        },
+        {
+            name: "Reading",
+            backgroundColor: "white",
+            link: '/Reading',
+            icon: <MaterialCommunityIcons name="book-open-variant" color={"blue"} size={30} />,
+            subtext: "Generate Stories and expand your vocabulary.",
+            img: "📖"
+        },
+        {
+            name: "Listening",
+            backgroundColor: "white",
+            link: '/Listening',
+            icon: <MaterialCommunityIcons name="headset" color={"blue"} size={30} />,
+            subtext: "Enhance your listening skills with diverse audio.",
+            img: "🔈"
+        },
+        {
+            name: "Writing",
+            backgroundColor: "white",
+            link: '/Writing',
+            icon: <MaterialCommunityIcons name="draw-pen" color={"blue"} size={30} />,
+            subtext: "Develop strong writing abilities through guided exercises and feedback.",
+            img: "📝"
+        }
+    ]
+
+    return (
+        <View className="px-4 bg-[#f8f9fe] h-screen">
+
+
+            {/*   <View className="h-32 mt-5">
+        <ThemedText className="mx-2 mb-3 text-xl font-medium text-black">AI Generated Random Practice</ThemedText>
+        <Carousel
+          style={{
+            width: "100%",
+            height: 280,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          width={400}
+          height={280}
+          pagingEnabled={pagingEnabled}
+          snapEnabled={snapEnabled}
+          mode={"vertical-stack"}
+          loop={true}
+          data={data}
+          modeConfig={{
+            snapDirection,
+            stackInterval: 10,
+          }}
+          customConfig={() => ({ type: "positive", viewCount })}
+          renderItem={({ index }) => (
+
+            <Animated.View
+              entering={FadeInRight.delay(
+                (viewCount - index) * 100,
+              ).duration(200)}
+              className="bg-blue-600  rounded-2xl h-[150px] w-full flex-row items-center justify-center">
+              <ThemedText className="font-bold text-white">
+                Chat with AI to practice English
+              </ThemedText>
+
+            </Animated.View>
+          )}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+      </View> */}
+
+            <View className="flex-col items-center justify-center">
+                <ThemedText className="text-black mb-5 mt-[50px] text-[22px] font-[NunitoBlack]" >Learn English through AI</ThemedText>
+            </View>
+
+            <View className="w-full mt-10 border-black border-3" >
+                <FlatList contentContainerStyle={{ rowGap: 15, padding: 3 }} numColumns={2} data={cards} renderItem={({ item, index }) => {
+                    return (
+                        <Card href={item.link} backgroundColor={item.backgroundColor} name={item.name} icon={item.icon} subtext={item.subtext} img={item.img} />
+                    )
+                }} />
+            </View>
+
+
+            <Pressable className="mt-4 " onPress={() => {
+                router.push("/wheel")
+            }}>
+                <View className="flex-row items-center justify-center w-full h-12 bg-blue-600 rounded-full ">
+                    <ThemedText className="font-bold text-white font-[NunitoBold]">
+                        Play Wheel Of Words
+                    </ThemedText>
+                </View>
+            </Pressable>
+        </View>
+    );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
