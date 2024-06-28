@@ -15,11 +15,20 @@ export default function Chat() {
     const [displayResponse, setDisplayResponse] = useState("");
     const [completedTyping, setCompletedTyping] = useState(false);
     const [chatID, setChatID] = useState(null)
+    const [newMessage, setNewMessage] = useState(false)
     const hist = useChatStore((state) => state.history)
 
     useEffect(() => {
-        if (hist.length > 0) {
-            setMessages(hist)
+        if (hist) {
+            console.log("hist", hist)
+            const historyArray = Object.keys(hist).map(key => {
+                return {
+                    ...hist[key]
+                };
+            });
+            console.log("hist", historyArray)
+            //setMessages(hist)
+            //set message id
         }
     }, [hist])
 
@@ -38,6 +47,7 @@ export default function Chat() {
             if (i > stringResponse.length) {
                 clearInterval(intervalId);
                 setCompletedTyping(true);
+                setNewMessage(false)
             }
         }, 20);
         return () => clearInterval(intervalId);
@@ -96,6 +106,7 @@ export default function Chat() {
                         "text": params.prompt
                     }] */
     const sendMessage = async (msg) => {
+
         setMessages([...messages, ...msg])
         try {
 
@@ -140,7 +151,7 @@ export default function Chat() {
                 text: response,
                 createdAt: new Date()
             }
-
+            setNewMessage(true)
             setMessages([...messages, ...msg, aiResponse])
             saveToFirebase(msg, aiResponse)
 
@@ -160,7 +171,7 @@ export default function Chat() {
         return (
             <View px={8}>
                 {props.currentMessage.user.name == "model" ? <Markdown>
-                    {displayResponse}
+                    {newMessage ? displayResponse : props.currentMessage.text}
                 </Markdown> : <Text p={2} color={"white"}>
                     {props.currentMessage.text}
                 </Text>}

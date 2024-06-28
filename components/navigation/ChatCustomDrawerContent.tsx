@@ -48,12 +48,7 @@ const CustomDrawerContent = (props) => {
 
                             return (
                                 <TouchableOpacity onPress={() => {
-                                    const historyArray = Object.keys(item.history).map(key => {
-                                        return {
-                                            ...item.history[key]
-                                        };
-                                    });
-                                    toChat(historyArray)
+                                    toChat(item.history)
                                     //router.replace("/Chat")
                                 }}>
                                     <XStack key={item.chatId} gap={15} alignItems="center">
