@@ -1,13 +1,16 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { GiftedChat, IMessage, Send, User } from 'react-native-gifted-chat'
-import { Avatar, Text, View } from 'tamagui';
-import { Dimensions } from 'react-native';
+import { Bubble, GiftedChat, IMessage, Send, User } from 'react-native-gifted-chat'
+import { Avatar, Text, View, XStack, YStack } from 'tamagui';
+import { Dimensions, FlatList, Pressable } from 'react-native';
 import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
 import database from '@react-native-firebase/database';
 import img from "./gemini.jpg"
 import useChatStore from '@/Storage/Zustand/chat';
+import { DrawerActions } from '@react-navigation/native';
+import { router, useNavigation } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 export default function Chat() {
     const inset = useSafeAreaInsets()
     const [messages, setMessages] = useState<IMessage[]>([])
@@ -18,19 +21,48 @@ export default function Chat() {
     const [newMessage, setNewMessage] = useState(false)
     const hist = useChatStore((state) => state.history)
 
+    const newChat = useChatStore((state) => state.newChat)
+
+
+
+    function getUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+    const navigation = useNavigation()
+    const closeDrawer = () => {
+        navigation.dispatch(DrawerActions.closeDrawer())
+    }
+
+
     useEffect(() => {
-        if (hist) {
-            console.log("hist", hist)
+
+        if (Object.keys(hist).length > 0) {
+
+
             const historyArray = Object.keys(hist).map(key => {
                 return {
                     ...hist[key]
                 };
             });
-            console.log("hist", historyArray)
-            //setMessages(hist)
+
+
+            historyArray.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            setMessages(historyArray)
             //set message id
+            setChatID(historyArray[0]._id)
+            closeDrawer()
+
         }
     }, [hist])
+
+
+    useEffect(() => {
+        setMessages([])
+    }, [newChat])
 
 
     useEffect(() => {
@@ -48,26 +80,29 @@ export default function Chat() {
                 clearInterval(intervalId);
                 setCompletedTyping(true);
                 setNewMessage(false)
+                chatRef.current?.scrollToEnd();
             }
         }, 20);
         return () => clearInterval(intervalId);
     }, [messages]);
 
 
+
+
     const saveToFirebase = (message, aiResponse) => {
         try {
             if (messages.length == 0) {
-                setChatID(message[0]._id)
+                setChatID(message._id)
                 database()
-                    .ref(`/chats/${message[0]._id}`)
+                    .ref(`/chats/${message._id}`)
                     .set({
-                        chatTitle: message[0].text,
-                        chatId: message[0]._id,
+                        chatTitle: message.text,
+                        chatId: message._id,
                         history: []
                     })
                     .then(() => console.log('Chat Created'));
 
-                saveData(message[0]._id, message, aiResponse)
+                saveData(message._id, message, aiResponse)
 
             } else {
                 saveData(chatID, message, aiResponse)
@@ -81,12 +116,12 @@ export default function Chat() {
 
 
     const saveData = (messageID, message, aiResponse) => {
-        console.log("ai response", message[0])
+        console.log("ai response", message)
         try {
             const newReference1 = database().ref(`/chats/${messageID}/history`).push();
             const newReference2 = database().ref(`/chats/${messageID}/history`).push();
 
-            var promise1 = newReference1.set(message[0])
+            var promise1 = newReference1.set(message)
             var promise2 = newReference2.set(aiResponse)
 
             Promise.all([promise1, promise2]).then(() => {
@@ -108,6 +143,8 @@ export default function Chat() {
     const sendMessage = async (msg) => {
 
         setMessages([...messages, ...msg])
+        const messageText = msg[0]
+        messageText.date = (new Date()).toISOString()
         try {
 
             const history = []
@@ -142,18 +179,21 @@ export default function Chat() {
 
 
             const aiResponse = {
-                _id: msg[0]._id + 1,
+                _id: getUUID(),
                 role: "",
                 user: {
                     _id: 2,
                     name: "model"
                 },
                 text: response,
-                createdAt: new Date()
+                createdAt: new Date(),
+                date: (new Date()).toISOString()
             }
+
+
             setNewMessage(true)
-            setMessages([...messages, ...msg, aiResponse])
-            saveToFirebase(msg, aiResponse)
+            setMessages([...messages, messageText, aiResponse])
+            saveToFirebase(messageText, aiResponse)
 
 
         } catch (error) {
@@ -201,6 +241,31 @@ export default function Chat() {
         )
     }
 
+
+    const renderBubble = (props) => {
+        console.log(props)
+        return (
+            <View mb={10} mt={10}>
+
+                <Bubble
+                    {...props}
+                    wrapperStyle={{
+                        left: {
+                            backgroundColor: '#d3d3d3'
+                        }
+                    }}
+                />
+                {props.position == "left" && <View px={10} py={5}>
+                    <XStack>
+                        <Pressable>
+                            <Ionicons name='copy-outline' color={"gray"} size={20} />
+                        </Pressable>
+                    </XStack>
+                </View>}
+            </View>
+        );
+    }
+
     /*     const renderComposer = (props) => {
             return (
                 <View style={styles.composerContainer}>
@@ -223,24 +288,58 @@ export default function Chat() {
             )
         } */
 
-    const placeholder = "Enter a prompt here"
+    const placeholder = "Ask me anything ... "
 
     const renderChatEmpty = (props) => {
         return (
-            <View >
-                <Text>
-                    hi how are you
+            <View ai={"center"} className={"h-full"} justifyContent='center' >
+                <Text fontFamily={"NunitoBold"} fontSize={20}>
+                    Learn English By Chatting with Gemini
                 </Text>
+                <YStack gap={20} mt={50}>
+                    <View className={"h-20 p-4 bg-gray-100 rounded-lg justify-center items-center"}>
+                        <Text fontFamily={"NunitoMedium"}>
+                            Generate all the text that you want.
+                        </Text>
+                        <Text fontFamily={"NunitoMedium"}>
+                            (essays, articles, reports, etc)
+                        </Text>
+                    </View>
+                    <View className={"h-20 w-3/4  p-4 bg-gray-100 rounded-lg justify-center items-center"}>
+                        <Text fontFamily={"NunitoMedium"}>
+                            Engage in a conversation with Gemini to improve your english writing skills.
+                        </Text>
+                    </View>
+                    <View className={"h-20 p-4 bg-gray-100 rounded-lg justify-center items-center"}>
+                        <Text fontFamily={"NunitoMedium"}>
+                            Learn English By Chatting with Gemini
+                        </Text>
+                    </View>
+                </YStack>
             </View>
         )
     }
 
+    const renderDay = () => {
+        return (
+            <></>
+        )
+    }
+
+    const chatRef = useRef<FlatList<IMessage> | null>(null);
+
+
     return (
 
         <View style={{ width }} bg={"white"} className={"h-full"} >
-            <GiftedChat {...{ messages, onSend, user, inverted, renderMessageText, renderAvatar, scrollToBottom, renderTime, placeholder, renderChatEmpty }} listViewProps={{
-                inverted: messages.length <= 0
-            }} />
+            <GiftedChat
+                textInputStyle={{ fontFamily: "NunitoBold" }}
+                messageContainerRef={chatRef}
+                {...{ messages, onSend, user, inverted, renderMessageText, renderAvatar, scrollToBottom, renderTime, placeholder, renderChatEmpty, renderDay, renderBubble }} listViewProps={{
+                    inverted: messages.length <= 0,
+                    showsVerticalScrollIndicator: false
+                }}
+            />
         </View >
 
 

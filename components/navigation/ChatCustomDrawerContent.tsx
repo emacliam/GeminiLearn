@@ -17,12 +17,16 @@ const CustomDrawerContent = (props) => {
         const onValueChange = database()
             .ref('/chats')
             .on('value', snapshot => {
-                const chatsArray = Object.keys(snapshot.val()).map(key => {
-                    return {
-                        ...snapshot.val()[key]
-                    };
-                });
-                setChats(chatsArray)
+                if (snapshot.val()) {
+                    const chatsArray = Object.keys(snapshot.val()).map(key => {
+                        console.log("kk")
+                        return {
+                            ...snapshot.val()[key]
+                        };
+                    });
+                    setChats(chatsArray)
+                }
+
             });
 
         // Stop listening for updates when no longer required
@@ -49,6 +53,7 @@ const CustomDrawerContent = (props) => {
                             return (
                                 <TouchableOpacity onPress={() => {
                                     toChat(item.history)
+
                                     //router.replace("/Chat")
                                 }}>
                                     <XStack key={item.chatId} gap={15} alignItems="center">

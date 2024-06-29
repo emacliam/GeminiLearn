@@ -4,8 +4,11 @@ import 'react-native-reanimated';
 import { Drawer } from "expo-router/drawer";
 import { DrawerContentScrollView, DrawerItemList, DrawerToggleButton } from '@react-navigation/drawer';
 import CustomDrawerContent from '@/components/navigation/ChatCustomDrawerContent';
+import { TouchableOpacity } from 'react-native';
+import useChatStore from '@/Storage/Zustand/chat';
 
 export default function GamesLayout() {
+    const newChat = useChatStore((state) => state.openNewChat)
     return (
         <Drawer
             screenOptions={{ headerShown: false }}
@@ -15,12 +18,17 @@ export default function GamesLayout() {
             <Drawer.Screen name="index" options={{
                 headerShown: true,
                 title: "Chat With Gemini",
+                headerTitleStyle: { fontFamily: "NunitoBold" },
                 drawerLabel: "",
                 drawerHideStatusBarOnOpen: true,
                 drawerItemStyle: { display: 'none' },
                 headerRight: () => {
                     return (
-                        <Ionicons name='add' size={30} />
+                        <TouchableOpacity onPress={() => {
+                            newChat()
+                        }}>
+                            <Ionicons name='add' size={30} />
+                        </TouchableOpacity>
                     )
                 },
 

@@ -1,8 +1,14 @@
 import { create } from "zustand";
 
 const useChatStore = create((set) => ({
-  history: [],
-  openRecentActivity: (hist) => set(() => ({ history: hist })),
+  history: {},
+  newChat: false,
+  openRecentActivity: (hist) =>
+    set(() => {
+      return { history: hist };
+    }),
+  openNewChat: () =>
+    set((state) => ({ newChat: state.newChat ? false : true })),
 }));
 
 export default useChatStore;
