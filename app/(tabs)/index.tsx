@@ -121,7 +121,7 @@ export default function TabTwoScreen() {
       </View> */}
 
             <View className="flex-col items-center justify-center">
-                <ThemedText className="text-black mb-5 mt-[50px] text-[22px] font-[NunitoBlack]" >Learn English through AI</ThemedText>
+                <ThemedText className="text-black mb-5 mt-[50px] text-center text-[20px] font-[NunitoBold]" >Master English with Gemini AI: Your Personal Language Companion</ThemedText>
             </View>
 
             <View className="w-full mt-10 border-black border-3" >
@@ -139,6 +139,15 @@ export default function TabTwoScreen() {
                 <View className="flex-row items-center justify-center w-full h-12 bg-blue-600 rounded-full ">
                     <ThemedText className="font-bold text-white font-[NunitoBold]">
                         Play Wheel Of Words
+                    </ThemedText>
+                </View>
+            </Pressable>
+            <Pressable className="mt-4 " onPress={() => {
+                router.push("/Chat")
+            }}>
+                <View className="flex-row items-center justify-center w-full h-12 bg-blue-600 rounded-full ">
+                    <ThemedText className="font-bold text-white font-[NunitoBold]">
+                        Chat With AI
                     </ThemedText>
                 </View>
             </Pressable>

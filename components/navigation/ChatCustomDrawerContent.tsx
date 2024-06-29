@@ -84,12 +84,7 @@ const CustomDrawerContent = (props) => {
                         </XStack>
 
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { }}>
-                        <XStack gap={15} alignItems="center">
-                            <Ionicons name='heart-outline' size={20} />
-                            <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"}>Favorites</Text>
-                        </XStack>
-                    </TouchableOpacity>
+
                 </YStack>
             </View>
         </DrawerContentScrollView >

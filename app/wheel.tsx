@@ -57,8 +57,7 @@ export default function WheelOfFortune() {
     const ask1 = async () => {
         try {
             const response = await ask.request({ text: "generate random 12 english words to learn in a array formate, with a maximum of 12 letters" })
-            console.log("kkkkkk", response.data.candidates[0].content.parts[0].text)
-            const sentence = response.data.candidates[0].content.parts[0].text;
+            const sentence = response.response.text();
             const match = sentence.match(/"([^"]*)"/g).map(match => match.replace(/"/g, ''))
             console.log(match)
             setResponse(match)
@@ -240,12 +239,12 @@ export default function WheelOfFortune() {
     };
 
     return (
-        <View className="bg-white pt-20 flex-1">
+        <View className="flex-1 pt-20 bg-white">
             <View >
-                <RNText className="font-extrabold text-3xl text-center text-black">
+                <RNText className="text-3xl font-extrabold text-center text-black">
                     Spin to Learn
                 </RNText>
-                <RNText className="font-medium mt-5 text-center text-black">
+                <RNText className="mt-5 font-medium text-center text-black">
                     Spin the wheel and learn a random word
                 </RNText>
             </View>
@@ -253,7 +252,7 @@ export default function WheelOfFortune() {
                 <View style={styles.container} className="mt-5">
 
                     {response && renderSvgWheel()}
-                    {!response && <RNText className="font-medium mt-5 text-center text-black">Getting random words from AI</RNText>}
+                    {!response && <RNText className="mt-5 font-medium text-center text-black">Getting random words from AI</RNText>}
                     {finished && enabled && renderWinner()}
                 </View>
             </PanGestureHandler>

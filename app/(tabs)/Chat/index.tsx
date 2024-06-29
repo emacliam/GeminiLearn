@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Bubble, GiftedChat, IMessage, Send, User } from 'react-native-gifted-chat'
+import { Bubble, Composer, GiftedChat, IMessage, Send, User } from 'react-native-gifted-chat'
 import { Avatar, Text, View, XStack, YStack } from 'tamagui';
-import { Dimensions, FlatList, Pressable } from 'react-native';
+import { Dimensions, FlatList, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
 import database from '@react-native-firebase/database';
@@ -11,6 +11,10 @@ import useChatStore from '@/Storage/Zustand/chat';
 import { DrawerActions } from '@react-navigation/native';
 import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
+
+
+
 export default function Chat() {
     const inset = useSafeAreaInsets()
     const [messages, setMessages] = useState<IMessage[]>([])
@@ -25,6 +29,8 @@ export default function Chat() {
 
 
 
+
+
     function getUUID() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -35,6 +41,9 @@ export default function Chat() {
     const closeDrawer = () => {
         navigation.dispatch(DrawerActions.closeDrawer())
     }
+    const copyToClipboard = async (text) => {
+        await Clipboard.setStringAsync(text);
+    };
 
 
     useEffect(() => {
@@ -210,9 +219,9 @@ export default function Chat() {
     const renderMessageText = (props) => {
         return (
             <View px={8}>
-                {props.currentMessage.user.name == "model" ? <Markdown>
+                {props.currentMessage.user.name == "model" ? <Markdown style={styles}>
                     {newMessage ? displayResponse : props.currentMessage.text}
-                </Markdown> : <Text p={2} color={"white"}>
+                </Markdown> : <Text p={2} color={"white"} style={styles.body}>
                     {props.currentMessage.text}
                 </Text>}
             </View>
@@ -245,7 +254,7 @@ export default function Chat() {
     const renderBubble = (props) => {
         console.log(props)
         return (
-            <View mb={10} mt={10}>
+            <View mb={4} mt={4}>
 
                 <Bubble
                     {...props}
@@ -257,9 +266,11 @@ export default function Chat() {
                 />
                 {props.position == "left" && <View px={10} py={5}>
                     <XStack>
-                        <Pressable>
+                        <TouchableOpacity onPress={() => {
+                            copyToClipboard(props.currentMessage.text)
+                        }}>
                             <Ionicons name='copy-outline' color={"gray"} size={20} />
-                        </Pressable>
+                        </TouchableOpacity>
                     </XStack>
                 </View>}
             </View>
@@ -327,15 +338,61 @@ export default function Chat() {
     }
 
     const chatRef = useRef<FlatList<IMessage> | null>(null);
+    const renderFooter = (props) => {
+        return <View {...props} height={40}></View>;
+    };
 
+    const [onFocus, setOnFocus] = useState(false)
+    const renderComposer = (props) => {
+        return (
+            <View className='flex-row items-center'>
+                <Composer
+                    {...props}
+                    textInputProps={{
+                        onFocus: () => setOnFocus(true),
+                        onBlur: () => setOnFocus(false),
+                        marginHorizontal: 12,
+                        blurOnSubmit: true,
+                        paddingVertical: 0,
+                        paddingHorizontal: 15,
+                        backgroundColor: onFocus ? "#fff" : "#fff",
+                        borderRadius: 10,
+                        borderColor: onFocus ? "#034ad9" : "#c0c0c0",
+                        borderWidth: 2,
+                        width: "100%",
+                        minHeight: 40,
 
+                    }}
+                ></Composer>
+                <Send {...props} >
+                    <View style={{ justifyContent: 'center', height: '100%', marginRight: 10 }}>
+                        <Ionicons
+                            name='send'
+                            size={24}
+                            color={"black"}
+                        />
+                    </View>
+                </Send>
+            </View>
+        );
+    };
+
+    const renderSend = (props) => {
+        return (
+
+            <></>
+        )
+    }
+
+    const multiline = true
+    const renderAvatarOnTop = true
     return (
 
         <View style={{ width }} bg={"white"} className={"h-full"} >
             <GiftedChat
                 textInputStyle={{ fontFamily: "NunitoBold" }}
                 messageContainerRef={chatRef}
-                {...{ messages, onSend, user, inverted, renderMessageText, renderAvatar, scrollToBottom, renderTime, placeholder, renderChatEmpty, renderDay, renderBubble }} listViewProps={{
+                {...{ messages, onSend, multiline, renderSend, user, inverted, renderMessageText, renderAvatar, scrollToBottom, renderTime, placeholder, renderChatEmpty, renderDay, renderBubble, renderFooter, renderComposer, renderAvatarOnTop }} listViewProps={{
                     inverted: messages.length <= 0,
                     showsVerticalScrollIndicator: false
                 }}
@@ -347,3 +404,9 @@ export default function Chat() {
 }
 
 
+const styles = StyleSheet.create({
+    body: {
+        fontFamily: "Nunito",
+        fontSize: 17
+    }
+})

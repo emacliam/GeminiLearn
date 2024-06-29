@@ -7,7 +7,6 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import TextGradient from '@furkankaya/react-native-linear-text-gradient';
 import { TamaguiProvider } from '@tamagui/core';
 import tamaguiConfig from '@/tamagui.config';
 
@@ -44,18 +43,7 @@ export default function RootLayout() {
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
             <Stack.Screen name="(tabs)" options={{
-              headerShown: false, headerTitle: () => {
-                return (
-                  <TextGradient
-                    style={{ fontWeight: "bold", fontSize: 25, fontFamily: "NunitoBlack" }}
-                    locations={[0, 1]}
-                    colors={["blue", "red"]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    text="Gemini Learn"
-                  />
-                )
-              }
+              headerShown: false
             }} />
             <Stack.Screen name="Grammer" options={{ headerShown: false }} />
             <Stack.Screen name="Writing" options={{ headerShown: false }} />
