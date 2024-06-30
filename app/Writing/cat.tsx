@@ -171,6 +171,10 @@ const styles = StyleSheet.create({
         padding: 15,
         alignItems: 'center',
         borderRadius: 5,
+    },
+    body: {
+        fontFamily: "Nunito",
+        fontSize: 17,
     }
 })
 

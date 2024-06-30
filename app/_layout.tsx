@@ -24,7 +24,9 @@ export default function RootLayout() {
     NunitoExtraBold: require("../assets/fonts/Nunito/static/Nunito-ExtraLightItalic.ttf"),
     NunitoMedium: require("../assets/fonts/Nunito/static/Nunito-Medium.ttf"),
     NunitoSemiBold: require("../assets/fonts/Nunito/static/Nunito-SemiBold.ttf"),
-    NunitoBlack: require("../assets/fonts/Nunito/static/Nunito-Black.ttf")
+    NunitoBlack: require("../assets/fonts/Nunito/static/Nunito-Black.ttf"),
+    NunitoItalic: require("../assets/fonts/Nunito/static/Nunito-Italic.ttf"),
+    NunitoMediumItalic: require("../assets/fonts/Nunito/static/Nunito-MediumItalic.ttf"),
   });
 
   useEffect(() => {
@@ -49,6 +51,7 @@ export default function RootLayout() {
             <Stack.Screen name="Writing" options={{ headerShown: false }} />
             <Stack.Screen name="Reading" options={{ headerShown: false }} />
             <Stack.Screen name="wheel" options={{ title: "Spinning the wheel", headerShown: true, presentation: "modal" }} />
+            <Stack.Screen name="newWord" options={{ headerShown: true, title: "Learn Word" }} />
             <Stack.Screen name="+not-found" />
           </Stack>
         </ThemeProvider>

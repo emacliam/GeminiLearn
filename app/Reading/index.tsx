@@ -14,7 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import ask from '@/services/Ask/ask';
 import Loading from '@/components/Loading';
-import { Text, View } from '@tamagui/core';
+import { Text, View } from 'tamagui';
 
 export default function TabTwoScreen() {
     const GenreList = [
