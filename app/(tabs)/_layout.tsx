@@ -62,6 +62,17 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="Speech"
+        options={{
+          title: 'Speech',
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'volume-medium' : 'volume-medium-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

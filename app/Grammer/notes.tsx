@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import Markdown from 'react-native-markdown-display';
 import * as Speech from 'expo-speech';
 import { useLocalSearchParams } from 'expo-router';
+import Loading from '@/components/Loading';
 
 export default function Notes() {
     const insets = useSafeAreaInsets()
@@ -40,24 +41,34 @@ export default function Notes() {
     return (
         <View >
             <ScrollView
-                className="px-4 pt-10"
+                className="bg-white"
                 showsVerticalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 style={{ height: '100%' }}
             >
-                {generating && <View className="flex-col items-center justify-center flex-1 h-screen">
-                    <Text >
-                        Generating notes on {params.name} from Gemini
-                    </Text></View>}
-                {generating == false && <Markdown style={styles} >
-                    {response}
-                </Markdown>}
+                {generating && <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
+                    <Loading loadingText={` Generating notes on ${params.name} from Gemini`} />
+                </View>}
+                {generating == false &&
+
+                    <View className="px-4 pt-10">
+                        <View className="bg-white">
+                            <Markdown style={styles} >
+                                {response}
+                            </Markdown>
+                        </View>
+                    </View>
+                }
             </ScrollView>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-
+    body: {
+        fontFamily: "Nunito",
+        fontSize: 17,
+        paddingBottom: 100
+    },
 })
 

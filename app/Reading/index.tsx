@@ -140,12 +140,11 @@ export default function TabTwoScreen() {
 
         <KeyboardAvoidingView>
 
-            <ScrollView className={"bg-white h-screen  "}>
-                {generating && <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
+            <ScrollView className={"bg-white "}>
+                {generating ? <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
 
                     <Loading loadingText={` Generating story`} />
-                </View>}
-                <View className={"p-4 space-y-6"}>
+                </View> : <View className={"p-4 space-y-6"}>
 
                     <View style={styles.titleContainer}>
                         <ThemedText type="title">Generate Your Own Story</ThemedText>
@@ -199,16 +198,19 @@ export default function TabTwoScreen() {
                             )
                         })}
                     </View>
-                    <Pressable className="mt-4 " onPress={() => {
+
+                    <Pressable className="pb-10 mt-4 " onPress={() => {
                         generateStory()
                     }}>
-                        <View className="flex-row items-center justify-center w-full h-12 bg-[#bcf601] rounded-xl">
-                            <ThemedText className="font-bold text-black">
+                        <View className="flex-row items-center justify-center w-full h-12 bg-blue-600 rounded-full">
+                            <ThemedText className="font-bold text-white">
                                 Generate Story
                             </ThemedText>
+
                         </View>
                     </Pressable>
-                </View>
+                </View>}
+
             </ScrollView>
         </KeyboardAvoidingView>
 

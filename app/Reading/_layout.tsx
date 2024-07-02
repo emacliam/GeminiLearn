@@ -20,8 +20,8 @@ export default function ReadingLayout() {
                 )
             }
         }}>
-            <Stack.Screen name="index" options={{ headerShown: true }} />
-            <Stack.Screen name="story" options={{ headerShown: false }} />
+            <Stack.Screen name="index" options={{ title: "Reading", headerShown: true }} />
+            <Stack.Screen name="story" options={{ title: "Story", headerShown: true }} />
         </Stack>
     );
 }

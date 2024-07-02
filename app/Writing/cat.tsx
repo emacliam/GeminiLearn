@@ -114,7 +114,7 @@ export default function Notes() {
 
                 {generating && <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
 
-                    <Loading loadingText={` Generating notes on ${params.name} from Gemini`} />
+                    <Loading loadingText={` Generating a task for level: ${params.name} from Gemini`} />
                 </View>}
 
                 <View className="px-4 pt-10">

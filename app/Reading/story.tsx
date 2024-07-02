@@ -38,7 +38,8 @@ export default function Story() {
 const styles = StyleSheet.create({
     body: {
         fontFamily: "Nunito",
-        fontSize: 17
+        fontSize: 17,
+        paddingBottom: 100
     },
     heading1: {
         textDecorationLine: "underline",

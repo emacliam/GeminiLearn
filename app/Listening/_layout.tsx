@@ -20,9 +20,9 @@ export default function ListenLayout() {
                 )
             }
         }}>
-            <Stack.Screen name="index" options={{ headerShown: true }} />
-            <Stack.Screen name="sentences" options={{ headerShown: false }} />
-            <Stack.Screen name="words" options={{ headerShown: false }} />
+            <Stack.Screen name="index" options={{ title: "Listening", headerShown: true }} />
+            <Stack.Screen name="sentences" options={{ title: "Sentences", headerShown: true }} />
+            <Stack.Screen name="words" options={{ title: "Words", headerShown: true }} />
         </Stack>
     );
 }
