@@ -277,27 +277,6 @@ export default function Chat() {
         );
     }
 
-    /*     const renderComposer = (props) => {
-            return (
-                <View style={styles.composerContainer}>
-                    <View style={styles.inputContainer}>
-                        <TextInput {...props}
-                            placeholder={'Type something...'}
-                            ref={(input) => { this.msgInput = input; }}
-                            onChangeText={(value) => this.onTextChange(value, props)}
-                            style={styles.textInput}
-                            value={props.text}
-                            multiline={true}
-                        />
-                    </View>
-                    <Send {...props} containerStyle={styles.sendWrapperStyle} >
-                        <View style={styles.sendContainer}>
-     
-                        </View>
-                    </Send>
-                </View>
-            )
-        } */
 
     const placeholder = "Ask me anything ... "
 
@@ -358,7 +337,7 @@ export default function Chat() {
                         backgroundColor: onFocus ? "#fff" : "#fff",
                         borderRadius: 10,
                         borderColor: onFocus ? "#034ad9" : "#c0c0c0",
-                        borderWidth: 2,
+                        borderWidth: 1,
                         width: "100%",
                         minHeight: 40,
 
