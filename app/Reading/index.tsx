@@ -147,9 +147,11 @@ export default function TabTwoScreen() {
                 </View> : <View className={"p-4 space-y-6"}>
 
                     <View style={styles.titleContainer}>
-                        <ThemedText type="title">Generate Your Own Story</ThemedText>
+
+                        <Text fontSize={24} fontWeight={"300"} color={"$black"} fontFamily={"NunitoBold"}>Generate Your Own Story</Text>
                     </View>
-                    <ThemedText>Learn vocabulary and comprehension from AI generated stories.</ThemedText>
+
+                    <Text fontSize={18} fontWeight={"300"} color={"$black"} fontFamily={"NunitoMedium"}>Learn vocabulary and comprehension from AI generated stories.</Text>
                     <LinearGradient
                         colors={['red', 'blue']}
                         start={{ x: 0, y: 0 }}
@@ -157,7 +159,7 @@ export default function TabTwoScreen() {
                         style={{ borderRadius: 10, height: "auto", padding: 1, overflow: "hidden" }}
                     >
                         <View className={"min-h-[10] bg-white rounded-t-[10px] overflow-hidden p-2 flex-row space-x-2 items-center"}>
-                            <ThemedText type="subtitle" className="text-black text-[15px] font-normal " style={{ fontFamily: "NunitoRegular" }}>Write a story idea / description</ThemedText>
+                            <ThemedText type="subtitle" style={{ fontFamily: "Nunito" }} className="text-black text-[15px] font-normal " style={{ fontFamily: "NunitoRegular" }}>Write a story idea / description</ThemedText>
                         </View>
                         <TextInput onChangeText={text => { setDescription(text) }} multiline={true}
                             numberOfLines={4} className={"min-h-[80] p-2 bg-white rounded-b-[10px] border-t-[0.5px] border-gray-400 overflow-hidden"}></TextInput>
@@ -165,7 +167,7 @@ export default function TabTwoScreen() {
                     {!image && <Pressable onPress={pickImage}>
                         <View className="flex-row items-center justify-center p-2 space-x-2 border-2 rounded-lg">
                             <Ionicons name="cloud-upload" size={20} color={"blue"} />
-                            <ThemedText type="subtitle" className="text-blue-800 text-[15px] font-normal" style={{ fontFamily: "NunitoRegular" }}>Add Image (Optional)</ThemedText>
+                            <ThemedText type="subtitle" style={{ fontFamily: "Nunito" }} className="text-blue-800 text-[15px] font-normal" style={{ fontFamily: "NunitoRegular" }}>Add Image (Optional)</ThemedText>
                         </View>
                     </Pressable>}
                     {image && <Image source={{ uri: image }} style={{
@@ -175,7 +177,7 @@ export default function TabTwoScreen() {
                     {image && <Pressable onPress={() => { setImage(null) }}>
                         <View className="flex-row items-center justify-center w-40 p-2 space-x-2">
                             <Ionicons name="trash" size={20} color={"red"} />
-                            <ThemedText type="subtitle" className="text-red-600 text-[15px] font-normal" style={{ fontFamily: "NunitoRegular" }}>Remove Image</ThemedText>
+                            <ThemedText type="subtitle" style={{ fontFamily: "Nunito" }} className="text-red-600 text-[15px] font-normal" style={{ fontFamily: "NunitoRegular" }}>Remove Image</ThemedText>
                         </View>
                     </Pressable>}
                     <ThemedText>Select Genre/s</ThemedText>

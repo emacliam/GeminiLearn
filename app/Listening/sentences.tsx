@@ -102,13 +102,13 @@ export default function Listen() {
                 <View flex={1} mx={30} w={'100%'}>
                     <View>
                         <ThemedView>
-                            <ThemedText type="title">Vocabulary</ThemedText>
+                            <Text fontSize={20} fontWeight={"300"} color={"$black"} fontFamily={"NunitoMedium"}>Sentences and Phrases</Text>
                         </ThemedView>
                         <FlatList showsVerticalScrollIndicator={false} contentContainerStyle={{
                             marginBottom: 100,
                             rowGap: 10,
                             marginTop: 20
-                        }} data={Words} ListFooterComponent={<View />}
+                        }} data={Phrases} ListFooterComponent={<View />}
                             ListFooterComponentStyle={{ height: 150 }} ItemSeparatorComponent={() => {
                                 return (<View width={10}></View>)
                             }} renderItem={({ item, index }) => {

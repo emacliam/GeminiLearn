@@ -83,8 +83,6 @@ export default function Listen() {
         ask1({
             text: prompt
         })
-
-
     }, [])
 
 
@@ -98,7 +96,7 @@ export default function Listen() {
                 <View flex={1} mx={30} w={'100%'}>
                     <View>
                         <ThemedView>
-                            <ThemedText type="title">Vocabulary</ThemedText>
+                            <Text fontSize={20} fontWeight={"300"} color={"$black"} fontFamily={"NunitoMedium"}>Words</Text>
                         </ThemedView>
                         <FlatList showsVerticalScrollIndicator={false} contentContainerStyle={{
                             marginBottom: 100,

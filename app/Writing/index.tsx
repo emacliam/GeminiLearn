@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Children } from 'react';
 import { Link } from 'expo-router';
+import { Text } from 'tamagui';
 
 export default function TabTwoScreen() {
     const GrammerSyllabus = [
@@ -38,10 +39,12 @@ export default function TabTwoScreen() {
                 }}
             />}>
             <ThemedView style={styles.titleContainer}>
-                <ThemedText type="title">Write & Improve</ThemedText>
+                <Text fontSize={24} fontWeight={"300"} color={"$black"} fontFamily={"NunitoBold"}>Write & Improve</Text>
+
             </ThemedView>
-            <ThemedText>Write short stories based on generated topics .</ThemedText>
-            <ThemedText className="mt-4" type="subtitle">Choose a Level</ThemedText>
+            <Text fontSize={18} fontWeight={"300"} color={"$black"} fontFamily={"NunitoMedium"}>Write short stories based on generated topics .</Text>
+
+            <ThemedText className="mt-4" fontSize={20} fontWeight={"300"} color={"$black"} fontFamily={"NunitoMedium"}>Choose a Level</ThemedText>
             {GrammerSyllabus.map((item, index) => {
                 const children = item.Children
                 return (

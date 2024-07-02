@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Children } from 'react';
 import { Link } from 'expo-router';
+import { Text } from 'tamagui';
 
 export default function TabTwoScreen() {
     const GrammerSyllabus = [
@@ -95,9 +96,10 @@ export default function TabTwoScreen() {
             headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
             headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
             <ThemedView style={styles.titleContainer}>
-                <ThemedText type="title">Grammar</ThemedText>
+
+                <Text fontSize={24} fontWeight={"300"} color={"$black"} fontFamily={"NunitoBold"}>Grammar</Text>
             </ThemedView>
-            <ThemedText>Here is a set order that you can follow to learn grammar effectively and quickly.</ThemedText>
+            <Text fontSize={18} fontWeight={"300"} color={"$black"} fontFamily={"NunitoMedium"}>Here is a set order that you can follow to learn grammar effectively and quickly.</Text>
             {GrammerSyllabus.map((item, index) => {
                 const children = item.Children
                 return (
@@ -108,7 +110,7 @@ export default function TabTwoScreen() {
                                     pathname: "Grammer/notes",
                                     params: { name: child.name }
                                 }}>
-                                    <ThemedText type="link">{child.name}</ThemedText>
+                                    <ThemedText type="link" style={{ fontFamily: "Nunito" }}>{child.name}</ThemedText>
                                 </Link>
                             )
                         })}
