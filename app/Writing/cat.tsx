@@ -36,7 +36,6 @@ export default function Notes() {
         try {
             setGenerating(true)
             const response = await ask.request(data)
-            console.log("kkkkkk", response.response.text())
             setResponse(response.response.text())
             setGenerating(false)
         } catch (error) {

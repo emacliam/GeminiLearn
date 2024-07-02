@@ -20,7 +20,6 @@ export default function Notes() {
     const ask1 = async (data: any) => {
         try {
             const response = await ask.request(data)
-            console.log("kkkkkk", response.response.text())
             setResponse(response.response.text())
             setGenerating(false)
         } catch (error) {

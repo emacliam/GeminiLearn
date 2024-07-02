@@ -6,6 +6,7 @@ import { DrawerContentScrollView, DrawerItemList, DrawerToggleButton } from '@re
 import CustomDrawerContent from '@/components/navigation/ChatCustomDrawerContent';
 import { TouchableOpacity } from 'react-native';
 import useChatStore from '@/Storage/Zustand/chat';
+import { View } from 'tamagui';
 
 export default function GamesLayout() {
     const newChat = useChatStore((state) => state.openNewChat)
@@ -27,7 +28,9 @@ export default function GamesLayout() {
                         <TouchableOpacity onPress={() => {
                             newChat()
                         }}>
-                            <Ionicons name='add' size={30} />
+                            <View px={10}>
+                                <Ionicons name='add' size={30} />
+                            </View>
                         </TouchableOpacity>
                     )
                 },

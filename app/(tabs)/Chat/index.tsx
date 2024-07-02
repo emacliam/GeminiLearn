@@ -316,7 +316,7 @@ export default function Chat() {
                             (essays, articles, reports, etc)
                         </Text>
                     </View>
-                    <View className={"h-20 w-3/4  p-4 bg-gray-100 rounded-lg justify-center items-center"}>
+                    <View className={"h-20 w-10/12  p-4 bg-gray-100 rounded-lg justify-center items-center"}>
                         <Text fontFamily={"NunitoMedium"}>
                             Engage in a conversation with Gemini to improve your english writing skills.
                         </Text>

@@ -19,7 +19,7 @@ const CustomDrawerContent = (props) => {
             .on('value', snapshot => {
                 if (snapshot.val()) {
                     const chatsArray = Object.keys(snapshot.val()).map(key => {
-                        console.log("kk")
+
                         return {
                             ...snapshot.val()[key]
                         };

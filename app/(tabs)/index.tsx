@@ -82,7 +82,7 @@ export default function TabTwoScreen() {
             backgroundColor: "white",
             link: '/Writing',
             icon: <MaterialCommunityIcons name="draw-pen" color={"blue"} size={30} />,
-            subtext: "Develop strong writing abilities through guided exercises and feedback.",
+            subtext: "Boost your writing with guided exercises and feedback.",
             img: "📝"
         }
     ]
@@ -121,12 +121,25 @@ export default function TabTwoScreen() {
                 <ThemedText className="text-black mb-5 mt-[50px] text-center text-[20px] font-[NunitoBold]" >Master English with Gemini AI: Your Personal Language Companion</ThemedText>
             </View> */}
 
-            {response && <View className="mx-2 rounded-2xl mt-10 shadow-sm shadow-blue-200 p-6  h-[12]40px] bg-white ">
+            {response && <View className="h-auto px-4 py-3 mx-2 mt-4 bg-white shadow-sm rounded-2xl shadow-blue-200 ">
 
                 {/*                 <ImageBackground source={newWordImage} resizeMode='cover' style={{ flex: 1, padding: 10, justifyContent: 'center' }}> */}
-                <ThemedText className="text-xl text-black font-[NunitoBold]">
-                    Learn a new word  🧠
-                </ThemedText>
+                <XStack alignItems='center' justifyContent='space-between'>
+                    <ThemedText className="text-xl text-black font-[NunitoBold]">
+                        Learn a new word  🧠
+                    </ThemedText>
+                    <Pressable className="mt-2 " onPress={() => {
+                        ask1(
+                            {
+                                text: newWordPrompt
+                            }
+                        )
+                    }}>
+                        <View className="flex-row items-center justify-center p-2 bg-blue-600 rounded-full ">
+                            <Ionicons name='refresh-circle' size={20} color={'white'} />
+                        </View>
+                    </Pressable>
+                </XStack>
 
                 <XStack gap={20}>
 
