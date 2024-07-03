@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, View, Pressable, Text, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
+import { Image, StyleSheet, Platform, Pressable, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -15,6 +15,7 @@ import { RichText, Toolbar, useEditorBridge } from '@10play/tentap-editor';
 import Loading from '@/components/Loading';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { Text, View } from 'tamagui';
 
 export default function Notes() {
     const insets = useSafeAreaInsets()
@@ -105,19 +106,17 @@ export default function Notes() {
 
     return (
         <View >
+
             <ScrollView
-                className="font-serif bg-white "
+                className="h-full font-serif bg-white"
                 showsVerticalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
-                style={{ height: '100%' }}
             >
 
-                {generating && <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
+                {generating ? <View className="flex-col items-center justify-center flex-1 h-screen bg-white">
 
                     <Loading loadingText={` Generating a task for level: ${params.name} from Gemini`} />
-                </View>}
-
-                <View className="px-4 pt-10">
+                </View> : <View className="px-4 pt-10 pb-32">
                     <View className="bg-white">
                         {generating == false && <Markdown style={styles} >
                             {response}
@@ -151,14 +150,15 @@ export default function Notes() {
                             }
                         })
                     }}>
-                        <View className="flex-row items-center justify-center w-full h-12 bg-blue-600 rounded-full">
-                            <ThemedText className="font-bold text-white">
+                        <View className="flex-row items-center justify-center w-full h-12 bg-black rounded-full">
+                            <Text className="text-white " fontFamily={"NunitoBold"}>
                                 Start Writing
-                            </ThemedText>
-
+                            </Text>
                         </View>
                     </Pressable>
-                </View>
+                </View>}
+
+
 
             </ScrollView >
         </View >
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     body: {
-        fontFamily: "Nunito",
+        fontFamily: "NunitoMedium",
         fontSize: 17,
     }
 })

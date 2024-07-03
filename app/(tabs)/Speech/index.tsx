@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text, XStack, YStack, View } from 'tamagui';
 import LottieView from 'lottie-react-native';
 import { useVoiceRecognition } from '@/hooks/useVoiceRecognition';
+import { moderateVerticalScale } from 'react-native-size-matters';
 
 
 export default function Speak() {
@@ -92,22 +93,17 @@ export default function Speak() {
     }
 
 
-
-
-
-
     return (
-        <View >
+        <View pb={moderateVerticalScale(60)} bg={"white"}>
 
-            <YStack justifyContent='space-between' alignItems='center' className="h-full py-10 bg-white ">
+            <YStack justifyContent='space-between' alignItems='center' className="h-full py-10 ">
                 <XStack className='items-center '>
-                    <View className={"h-0 border-[1px] border-blue-600 flex-1"}></View>
-                    <View className="items-center px-2 text-center border-2 border-blue-600 rounded-full">
-                        {state.isRecording && <Text fontSize={16} m={10} color={"$black"} fontFamily={"NunitoMedium"}>Go ahead i'm listening</Text>}
-                        {state.isRecording == false && <Text fontSize={16} m={10} color={"$black"} fontFamily={"NunitoMedium"}>Press and Hold the mic</Text>}
+                    <View className={"h-0 border-[1px] border-black-600 flex-1"}></View>
+                    <View className="items-center px-2 text-center bg-black border-2 rounded-full">
+                        {state.isRecording && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Go ahead i'm listening</Text>}
+                        {state.isRecording == false && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Press and Hold the mic</Text>}
                     </View>
-
-                    <View className={"h-0 border-[1px] flex-1 border-blue-600"}></View>
+                    <View className={"h-0 border-[1px] flex-1 border-black-600"}></View>
                 </XStack>
                 <View className="flex-1" ai={"center"}>
                     {speaking ? <LottieView
@@ -134,7 +130,7 @@ export default function Speak() {
                     />}
 
                     <View className="">
-                        <Text ai={"center"} fontSize={25} m={10} color={"$black"} fontFamily={"NunitoBold"}>{state.results}</Text>
+                        <Text ai={"center"} fontSize={25} m={10} color={"black"} fontFamily={"NunitoBold"}>{state.results}</Text>
                     </View>
 
                 </View>
@@ -154,12 +150,12 @@ export default function Speak() {
                                 }
                             }}
                         >
-                            <Ionicons name="mic-circle" size={60} color={"blue"} />
+                            <Ionicons name="mic-circle-outline" size={80} color={"#098756"} />
                         </Pressable>}
                         {speaking && <Pressable onPress={() => {
                             stopSpeaking()
                         }}>
-                            <Ionicons name='close-circle-outline' size={60} color={"blue"} />
+                            <Ionicons name='close-circle-outline' size={80} color={"#098756"} />
                         </Pressable>}
                     </XStack>
                 </View>
@@ -179,7 +175,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     body: {
-        fontFamily: "Nunito",
+        fontFamily: "NunitoMedium",
         fontSize: 17,
     }
 })

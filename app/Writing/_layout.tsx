@@ -8,10 +8,10 @@ export default function WritingLayout() {
         <Stack screenOptions={{
             headerLeft: () => {
                 return (
-                    <Pressable onPress={() => {
+                    <Pressable className={"pr-5"} onPress={() => {
                         router.back()
                     }}>
-                        <Ionicons name='chevron-back' size={30} />
+                        <Ionicons name='arrow-back' size={30} />
 
                     </Pressable>
                 )

@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Link, router } from 'expo-router';
-import { StyleSheet, Image, Platform, View, Text, Pressable, StatusBar, ImageBackground } from 'react-native';
+import { StyleSheet, Image, Platform, Text, Pressable, StatusBar, ImageBackground } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInRight } from "react-native-reanimated";
@@ -11,9 +11,11 @@ import TextGradient from '@furkankaya/react-native-linear-text-gradient';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
-import { XStack } from 'tamagui';
+import { ScrollView, View, XStack } from 'tamagui';
 import * as Speech from 'expo-speech';
-import newWordImage from '../../assets/images/bgImg.jpg';
+import img from "../../assets/images/memphis-mini.png";
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
+import LinearGradient from 'expo-linear-gradient';
 
 
 
@@ -32,12 +34,13 @@ export default function TabTwoScreen() {
 
     const [response, setResponse] = useState("")
     const [generating, setGenerating] = useState(false)
+    const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
 
 
     function Card({ name, backgroundColor, href, icon, subtext, img }) {
         return (
-            <Pressable className="mx-2 flex-1 rounded-2xl   shadow-sm  h-[190px] p-3" style={{ backgroundColor }} onPress={() => {
+            <Pressable className="mx-2 flex-1 rounded-2xl shadow-sm  h-[190px] p-3" style={{ backgroundColor }} onPress={() => {
                 router.push(href)
             }}>
                 <View >
@@ -45,7 +48,7 @@ export default function TabTwoScreen() {
                         <Text className="text-3xl">{img}</Text>
                     </View>
                     <ThemedText className="text-lg font-medium text-black" style={{ fontFamily: "NunitoBold" }}>{name}</ThemedText>
-                    <ThemedText type="subtitle" className="text-black text-[15px] font-normal mt-1" style={{ fontFamily: "NunitoRegular" }}>{subtext}</ThemedText>
+                    <ThemedText type="subtitle" className="text-black text-[15px] font-normal mt-1" style={{ fontFamily: "NunitoMedium" }}>{subtext}</ThemedText>
                 </View>
             </Pressable>
         )
@@ -54,7 +57,7 @@ export default function TabTwoScreen() {
     const cards = [
         {
             name: "Grammer",
-            backgroundColor: "white",
+            backgroundColor: "#fee7de",
             link: '/Grammer',
             icon: <MaterialIcons name="abc" color={"blue"} size={40} />,
             subtext: "Master the essential rules and structure of English grammar.",
@@ -63,7 +66,7 @@ export default function TabTwoScreen() {
         },
         {
             name: "Reading",
-            backgroundColor: "white",
+            backgroundColor: "#ffe1b1",
             link: '/Reading',
             icon: <MaterialCommunityIcons name="book-open-variant" color={"blue"} size={30} />,
             subtext: "Generate Stories and expand your vocabulary.",
@@ -71,7 +74,7 @@ export default function TabTwoScreen() {
         },
         {
             name: "Listening",
-            backgroundColor: "white",
+            backgroundColor: "#dee9b4",
             link: '/Listening',
             icon: <MaterialCommunityIcons name="headset" color={"blue"} size={30} />,
             subtext: "Enhance your listening skills with diverse audio.",
@@ -79,7 +82,7 @@ export default function TabTwoScreen() {
         },
         {
             name: "Writing",
-            backgroundColor: "white",
+            backgroundColor: "#f7b8cb",
             link: '/Writing',
             icon: <MaterialCommunityIcons name="draw-pen" color={"blue"} size={30} />,
             subtext: "Boost your writing with guided exercises and feedback.",
@@ -113,100 +116,96 @@ export default function TabTwoScreen() {
         )
     }, [])
 
+    const inserts = useSafeAreaInsets()
 
 
     return (
-        <View className="px-4 bg-[#f8f9fe] h-screen">
-            {/*   <View className="flex-col items-center justify-center">
-                <ThemedText className="text-black mb-5 mt-[50px] text-center text-[20px] font-[NunitoBold]" >Master English with Gemini AI: Your Personal Language Companion</ThemedText>
-            </View> */}
-
-            {response && <View className="h-auto px-4 py-3 mx-2 mt-4 bg-white shadow-sm rounded-2xl shadow-blue-200 ">
-
-                {/*                 <ImageBackground source={newWordImage} resizeMode='cover' style={{ flex: 1, padding: 10, justifyContent: 'center' }}> */}
-                <XStack alignItems='center' justifyContent='space-between'>
-                    <ThemedText className="text-xl text-black font-[NunitoBold]">
-                        Learn a new word  🧠
-                    </ThemedText>
-                    <Pressable className="mt-2 " onPress={() => {
-                        ask1(
-                            {
-                                text: newWordPrompt
-                            }
-                        )
-                    }}>
-                        <View className="flex-row items-center justify-center p-2 bg-blue-600 rounded-full ">
-                            <Ionicons name='refresh-circle' size={20} color={'white'} />
-                        </View>
-                    </Pressable>
-                </XStack>
-
-                <XStack gap={20}>
-
-                    <Pressable className="mt-2 " onPress={() => {
-                        speak(response)
-                    }}>
-                        <View className="flex-row items-center justify-center p-2 bg-blue-600 rounded-full ">
-                            <Ionicons name='volume-high-outline' size={20} color={'white'} />
-                        </View>
-                    </Pressable>
-                    <Markdown style={styles}>
-                        {response}
-                    </Markdown>
-
-                </XStack>
-                <Pressable className="mt-2 " onPress={() => {
-                    router.push({
-                        pathname: "/newWord",
-                        params: {
-                            word: response
-                        }
-                    })
-                }}>
-                    <ThemedText className="font-bold underline text-black font-[NunitoBold]">
-                        Learn More
-                    </ThemedText>
-
-                </Pressable>
-
-
-            </View>}
-
-            <View className="w-full mt-5 border-black border-3" >
-                <FlatList contentContainerStyle={{ rowGap: 15, padding: 3 }} numColumns={2} data={cards} renderItem={({ item, index }) => {
-                    return (
-                        <Card href={item.link} backgroundColor={item.backgroundColor} name={item.name} icon={item.icon} subtext={item.subtext} img={item.img} />
-                    )
-                }} />
-            </View>
-
-
-            {/* <Pressable className="mt-4 " onPress={() => {
-                router.push("/wheel")
-            }}>
-                <View className="flex-row items-center justify-center w-full h-12 bg-blue-600 rounded-full ">
-                    <ThemedText className="font-bold text-white font-[NunitoBold]">
-                        Play Wheel Of Words
-                    </ThemedText>
+        <View top={inserts.top}>
+            <ImageBackground source={img} resizeMode='cover'>
+                <View mt={10} px={12} ai={'center'}>
+                    <TextGradient
+                        style={{ fontSize: 30, fontFamily: "NunitoBold" }}
+                        locations={[0, 1]}
+                        colors={["blue", "red"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        text="Gemini Learn"
+                    />
                 </View>
-            </Pressable> */}
-            <Pressable className="mt-4 " onPress={() => {
-                router.push("/Chat")
-            }}>
-                <View className="flex-row items-center justify-center w-full h-12 bg-blue-600 rounded-full ">
-                    <ThemedText className="font-bold text-white font-[NunitoBold]">
-                        Chat With AI
-                    </ThemedText>
-                </View>
-            </Pressable>
+                <ScrollView >
+                    <View className="h-screen px-2">
+
+                        <View className="h-auto px-4 py-3 mx-2 mt-4 bg-[#098756]  shadow-sm rounded-2xl shadow-blue-200 ">
+
+                            {/*                 <ImageBackground source={newWordImage} resizeMode='cover' style={{ flex: 1, padding: 10, justifyContent: 'center' }}> */}
+                            <XStack alignItems='center' justifyContent='space-between'>
+                                <ThemedText className="text-xl text-white font-[NunitoBold]">
+                                    Learn a new word  🧠
+                                </ThemedText>
+                                <Pressable className="mt-2 " onPress={() => {
+                                    ask1(
+                                        {
+                                            text: newWordPrompt
+                                        }
+                                    )
+                                }}>
+
+                                    <Ionicons name='refresh-circle' size={30} color={'white'} />
+
+                                </Pressable>
+                            </XStack>
+
+                            <XStack gap={20} alignItems='center'>
+
+                                <Pressable className="" onPress={() => {
+                                    speak(response)
+                                }}>
+
+                                    <Ionicons name='volume-high' size={30} color={'white'} />
+
+                                </Pressable>
+                                <ShimmerPlaceHolder shimmerColors={["white", "gray"]} visible={generating == true ? false : true}>
+                                    <Markdown style={styles}>
+                                        {response}
+                                    </Markdown>
+                                </ShimmerPlaceHolder>
+
+
+                            </XStack>
+                            <Pressable className="mt-2 " onPress={() => {
+                                router.push({
+                                    pathname: "/newWord",
+                                    params: {
+                                        word: response
+                                    }
+                                })
+                            }}>
+                                <ThemedText className="font-bold underline text-white font-[NunitoBold]">
+                                    Learn More
+                                </ThemedText>
+                            </Pressable>
+                        </View>
+
+                        <View className="w-full mt-4 border-black border-3" >
+                            <FlatList showsVerticalScrollIndicator={false} contentContainerStyle={{ rowGap: 15, paddingBottom: 60 }} numColumns={2} data={cards} renderItem={({ item, index }) => {
+                                return (
+                                    <Card href={item.link} backgroundColor={item.backgroundColor} name={item.name} icon={item.icon} subtext={item.subtext} img={item.img} />
+                                )
+                            }} />
+                        </View>
+                    </View>
+                </ScrollView>
+            </ImageBackground>
         </View>
+
+
     );
 }
 
 const styles = StyleSheet.create({
     body: {
         fontFamily: "NunitoMediumItalic",
-        fontSize: 17,
-        textDecorationLine: "underline"
+        fontSize: 20,
+        color: "white"
     }
 })

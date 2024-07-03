@@ -96,14 +96,14 @@ export default function Listen() {
 
         <>
 
-            {generating ? <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
+            {generating ? <View className="flex-col items-center justify-center flex-1 h-screen bg-white">
                 <Loading loadingText={` Generating random sentences from Gemini`} />
             </View> : <View mt={0} px={10} flex={1} alignItems="center" pt={30} bg="white" >
-                <View flex={1} mx={30} w={'100%'}>
+                <View flex={1} px={10} w={'100%'}>
                     <View>
-                        <ThemedView>
-                            <Text fontSize={20} fontWeight={"300"} color={"$black"} fontFamily={"NunitoMedium"}>Sentences and Phrases</Text>
-                        </ThemedView>
+                        <View>
+                            <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoBold"}>Master Sentences, One Phrase at a Time 🚀"</Text>
+                        </View>
                         <FlatList showsVerticalScrollIndicator={false} contentContainerStyle={{
                             marginBottom: 100,
                             rowGap: 10,
@@ -113,21 +113,17 @@ export default function Listen() {
                                 return (<View width={10}></View>)
                             }} renderItem={({ item, index }) => {
                                 return (
-                                    <Card padded gap={10}>
+                                    <Card bg={"#098756"} padded gap={10}>
                                         <YStack gap={3} >
-
-                                            <Text fontSize={15} fontWeight={"300"} color={"$gray11"} fontFamily={"NunitoMedium"}>{item.phrase}</Text>
+                                            <Text fontSize={15} fontWeight={"300"} color={"white"} fontFamily={"NunitoMedium"}>{item.phrase}</Text>
                                         </YStack>
                                         <XStack justifyContent="space-between" alignContent="center" alignItems="center" >
-
-                                            <Card onPress={() => {
+                                            <Card bg={"$colorTransparent"} onPress={() => {
                                                 speak(item.phrase)
-                                            }} padding={10} borderRadius={100} backgroundColor={"$gray8"} justifyContent='center' alignContent='center' alignItems='center'>
-                                                <Ionicons name="volume-medium" size={24} color={active ? "#1ca655" : "black"} />
+                                            }} padding={10} borderRadius={100} justifyContent='center' alignContent='center' alignItems='center'>
+                                                <Ionicons name="volume-medium" size={24} color={"white"} />
                                             </Card>
                                         </XStack>
-
-
                                     </Card>
                                 )
                             }} />

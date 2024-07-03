@@ -42,7 +42,7 @@ const CustomDrawerContent = (props) => {
 
             <View flexDirection='column' h={height}>
                 <YStack style={{ padding: 20 }} flex={3}>
-                    <Text mb={10} fontFamily={"NunitoBold"} style={{ fontSize: 16 }}>Recent Conversations</Text>
+                    <Text mb={10} fontFamily={"NunitoBold"} style={{ fontSize: 16 }} color={"black"}>Recent Conversations</Text>
                     <FlatList
                         contentContainerStyle={{
                             rowGap: 10
@@ -58,7 +58,7 @@ const CustomDrawerContent = (props) => {
                                 }}>
                                     <XStack key={item.chatId} gap={15} alignItems="center">
                                         <Ionicons name='chatbox-outline' size={20} />
-                                        <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"}>{item.chatTitle}</Text>
+                                        <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"} color={"black"}>{item.chatTitle}</Text>
                                     </XStack>
                                 </TouchableOpacity>
                             )
@@ -67,7 +67,7 @@ const CustomDrawerContent = (props) => {
                         ListEmptyComponent={() => {
                             return (
                                 <XStack gap={15} alignItems="center">
-                                    <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"} color={"$gray10"}>No activity yet, start a chat</Text>
+                                    <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"} color={"black"}>No activity yet, start a chat</Text>
                                 </XStack>
                             )
                         }}
@@ -80,7 +80,7 @@ const CustomDrawerContent = (props) => {
                     <TouchableOpacity onPress={() => { }} >
                         <XStack gap={15} alignItems="center">
                             <Ionicons name='trash-bin-outline' size={20} />
-                            <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"}>Clear Conversations</Text>
+                            <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"} color={"black"}>Clear Conversations</Text>
                         </XStack>
 
                     </TouchableOpacity>

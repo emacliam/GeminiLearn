@@ -141,33 +141,25 @@ export default function TabTwoScreen() {
         <KeyboardAvoidingView>
 
             <ScrollView className={"bg-white "}>
-                {generating ? <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
+                {generating ? <View className="flex-col items-center justify-center flex-1 h-screen bg-white">
 
                     <Loading loadingText={` Generating story`} />
                 </View> : <View className={"p-4 space-y-6"}>
 
                     <View style={styles.titleContainer}>
-
-                        <Text fontSize={24} fontWeight={"300"} color={"$black"} fontFamily={"NunitoBold"}>Generate Your Own Story</Text>
+                        <Text fontSize={24} fontWeight={"300"} color={"black"} fontFamily={"NunitoBold"}>Generate Your Own Story</Text>
                     </View>
 
-                    <Text fontSize={18} fontWeight={"300"} color={"$black"} fontFamily={"NunitoMedium"}>Learn vocabulary and comprehension from AI generated stories.</Text>
-                    <LinearGradient
-                        colors={['red', 'blue']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={{ borderRadius: 10, height: "auto", padding: 1, overflow: "hidden" }}
-                    >
-                        <View className={"min-h-[10] bg-white rounded-t-[10px] overflow-hidden p-2 flex-row space-x-2 items-center"}>
-                            <ThemedText type="subtitle" style={{ fontFamily: "Nunito" }} className="text-black text-[15px] font-normal " style={{ fontFamily: "NunitoRegular" }}>Write a story idea / description</ThemedText>
-                        </View>
-                        <TextInput onChangeText={text => { setDescription(text) }} multiline={true}
-                            numberOfLines={4} className={"min-h-[80] p-2 bg-white rounded-b-[10px] border-t-[0.5px] border-gray-400 overflow-hidden"}></TextInput>
-                    </LinearGradient>
+                    <Text fontSize={18} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>Learn vocabulary and comprehension from AI generated stories.</Text>
+
+
+                    <TextInput onChangeText={text => { setDescription(text) }} placeholderTextColor={"black"} placeholder='Write a story idea / description' multiline={true}
+                        numberOfLines={4} className={"min-h-[80] p-2 bg-white text-[15px] rounded-[10px] border-[1px] border-gray-900"}></TextInput>
+
                     {!image && <Pressable onPress={pickImage}>
-                        <View className="flex-row items-center justify-center p-2 space-x-2 border-2 rounded-lg">
-                            <Ionicons name="cloud-upload" size={20} color={"blue"} />
-                            <ThemedText type="subtitle" style={{ fontFamily: "Nunito" }} className="text-blue-800 text-[15px] font-normal" style={{ fontFamily: "NunitoRegular" }}>Add Image (Optional)</ThemedText>
+                        <View className="flex-row items-center justify-center p-2 space-x-4 border-[1px] border-gray-900 rounded-lg">
+                            <Ionicons name="cloud-upload" size={30} color={"#098756"} />
+                            <Text style={{ fontFamily: "Nunito" }} mx={10} className="text-[15px] font-normal text-gray-900" style={{ fontFamily: "NunitoRegular" }}>Add Image (Optional)</Text>
                         </View>
                     </Pressable>}
                     {image && <Image source={{ uri: image }} style={{
@@ -177,11 +169,13 @@ export default function TabTwoScreen() {
                     {image && <Pressable onPress={() => { setImage(null) }}>
                         <View className="flex-row items-center justify-center w-40 p-2 space-x-2">
                             <Ionicons name="trash" size={20} color={"red"} />
-                            <ThemedText type="subtitle" style={{ fontFamily: "Nunito" }} className="text-red-600 text-[15px] font-normal" style={{ fontFamily: "NunitoRegular" }}>Remove Image</ThemedText>
+                            <Text type="subtitle" style={{ fontFamily: "Nunito" }} className="text-red-600 text-[15px] font-normal" style={{ fontFamily: "NunitoRegular" }}>Remove Image</Text>
                         </View>
                     </Pressable>}
-                    <ThemedText>Select Genre/s</ThemedText>
-                    <View className="flex-row flex-wrap items-center space-x-2 space-y-2">
+
+
+                    <Text color={'black'} fontSize={15} style={{ fontFamily: "NunitoMedium" }} mt={15}>Select Genre/s</Text>
+                    <View className="flex-row flex-wrap items-center mt-3 space-x-1 space-y-1">
                         {GenreList.map((item, index) => {
                             const border = selected.includes(item.name)
                             return (
@@ -189,11 +183,13 @@ export default function TabTwoScreen() {
                                     GenreSelected(item.name)
                                 }}>
 
-                                    <View className={"border-[1px] rounded-lg p-2"} style={{
-                                        borderColor: border ? "red" : "blue",
+                                    <View className={"border-[1px] rounded-full px-4 py-2"} style={{
+                                        borderColor: border ? "#098756" : "#111827",
+                                        backgroundColor: border ? "#098756" : "white",
+
 
                                     }} >
-                                        <ThemedText type="link">{item.name}</ThemedText>
+                                        <Text color={border ? "white" : "#111827"} fontSize={15} style={{ fontFamily: "NunitoMedium" }}>{item.name}</Text>
                                     </View>
                                 </Pressable>
 
@@ -204,10 +200,10 @@ export default function TabTwoScreen() {
                     <Pressable className="pb-10 mt-4 " onPress={() => {
                         generateStory()
                     }}>
-                        <View className="flex-row items-center justify-center w-full h-12 bg-blue-600 rounded-full">
-                            <ThemedText className="font-bold text-white">
+                        <View className="flex-row items-center justify-center w-full h-12 bg-black rounded-full">
+                            <Text className="font-[NunitoBold] text-white">
                                 Generate Story
-                            </ThemedText>
+                            </Text>
 
                         </View>
                     </Pressable>

@@ -46,7 +46,7 @@ export default function Notes() {
                 contentInsetAdjustmentBehavior="automatic"
                 style={{ height: '100%' }}
             >
-                {generating && <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
+                {generating && <View className="flex-col items-center justify-center flex-1 h-screen bg-white">
                     <Loading loadingText={` Generating notes on ${params.name} from Gemini`} />
                 </View>}
                 {generating == false &&
@@ -66,7 +66,7 @@ export default function Notes() {
 
 const styles = StyleSheet.create({
     body: {
-        fontFamily: "Nunito",
+        fontFamily: "NunitoMedium",
         fontSize: 17,
         paddingBottom: 100
     },

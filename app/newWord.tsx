@@ -75,18 +75,18 @@ export default function Notes() {
                 style={{ height: '100%' }}
             >
 
-                {generating && <View className="flex-1 h-screen items-center flex-col justify-center bg-[#1d0826]">
+                {generating ? <View className="flex-col items-center justify-center flex-1 h-screen bg-white">
 
                     <Loading loadingText={` Generating information on ${params.word} from Gemini`} />
-                </View>}
-
-                <View className="px-4 pt-10">
+                </View> : <View className="px-4 pt-10">
                     <View className="bg-white">
                         {generating == false && <Markdown style={styles} >
                             {response}
                         </Markdown>}
                     </View>
-                </View>
+                </View>}
+
+
 
             </ScrollView >
         </View >
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     body: {
-        fontFamily: "Nunito",
+        fontFamily: "NunitoMedium",
         fontSize: 17,
     }
 })

@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
-import { Button, Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Button, Dimensions, StyleSheet, View } from 'react-native';
 import LottieView from 'lottie-react-native';
+import { Text } from 'tamagui';
 
 export default function Loading({ loadingText }) {
     const animation = useRef(null);
@@ -17,13 +18,13 @@ export default function Loading({ loadingText }) {
                 style={{
                     width: 200,
                     height: 200,
-                    backgroundColor: "transparent"
+                    backgroundColor: "white"
                 }}
                 // Find more Lottie files at https://lottiefiles.com/featured
                 source={require('../assets/animations/AIloading.json')}
             />
 
-            <Text style={{ color: "white" }}>
+            <Text ai={"center"} textAlign='center' style={{ color: "black" }} px={10} fontSize={20} fontWeight={"300"} fontFamily={"NunitoMedium"}>
                 {loadingText}
             </Text>
         </View>
@@ -32,7 +33,7 @@ export default function Loading({ loadingText }) {
 
 const styles = StyleSheet.create({
     animationContainer: {
-        backgroundColor: '#1d0826',
+        backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,

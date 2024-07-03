@@ -11,6 +11,7 @@ import { TamaguiProvider } from '@tamagui/core';
 import tamaguiConfig from '@/tamagui.config';
 import { Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -45,7 +46,8 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView>
       <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ThemeProvider value={DefaultTheme}>
+          <StatusBar style="dark" />
           <Stack>
             <Stack.Screen name="(tabs)" options={{
               headerShown: false,
@@ -55,17 +57,16 @@ export default function RootLayout() {
             <Stack.Screen name="Writing" options={{ headerShown: false }} />
             <Stack.Screen name="Reading" options={{ headerShown: false }} />
             <Stack.Screen name="Listening" options={{ headerShown: false }} />
-            <Stack.Screen name="wheel" options={{ title: "Spinning the wheel", headerShown: true, presentation: "modal" }} />
             <Stack.Screen name="newWord" options={{
               headerShown: true, title: "Learn Word", headerBackTitle: "", headerLeft: () => {
                 return (
 
 
-                  <Pressable onPress={() => {
+                  <Pressable className={"pr-5"} onPress={() => {
                     router.back()
 
                   }}>
-                    <Ionicons name='chevron-back' size={30} />
+                    <Ionicons name='arrow-back' size={30} />
 
 
                   </Pressable>

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Bubble, Composer, GiftedChat, IMessage, Send, User } from 'react-native-gifted-chat'
 import { Avatar, Text, View, XStack, YStack } from 'tamagui';
-import { Dimensions, FlatList, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { Dimensions, FlatList, Keyboard, KeyboardAvoidingView, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
 import database from '@react-native-firebase/database';
@@ -12,6 +12,7 @@ import { DrawerActions } from '@react-navigation/native';
 import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
+import { moderateVerticalScale } from 'react-native-size-matters';
 
 
 
@@ -24,8 +25,30 @@ export default function Chat() {
     const [chatID, setChatID] = useState(null)
     const [newMessage, setNewMessage] = useState(false)
     const hist = useChatStore((state) => state.history)
-
     const newChat = useChatStore((state) => state.newChat)
+
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false);
+            }
+        );
+
+        return () => {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, []);
+
 
 
 
@@ -125,7 +148,7 @@ export default function Chat() {
 
 
     const saveData = (messageID, message, aiResponse) => {
-        console.log("ai response", message)
+
         try {
             const newReference1 = database().ref(`/chats/${messageID}/history`).push();
             const newReference2 = database().ref(`/chats/${messageID}/history`).push();
@@ -252,7 +275,6 @@ export default function Chat() {
 
 
     const renderBubble = (props) => {
-        console.log(props)
         return (
             <View mb={4} mt={4}>
 
@@ -261,6 +283,9 @@ export default function Chat() {
                     wrapperStyle={{
                         left: {
                             backgroundColor: '#d3d3d3'
+                        },
+                        right: {
+                            backgroundColor: "#098756"
                         }
                     }}
                 />
@@ -282,31 +307,33 @@ export default function Chat() {
 
     const renderChatEmpty = (props) => {
         return (
-            <View ai={"center"} className={"h-full"} justifyContent='center' >
-                <Text fontFamily={"NunitoBold"} fontSize={20}>
-                    Learn English By Chatting with Gemini
-                </Text>
-                <YStack gap={20} mt={50}>
-                    <View className={"h-20 p-4 bg-gray-100 rounded-lg justify-center items-center"}>
-                        <Text fontFamily={"NunitoMedium"}>
-                            Generate all the text that you want.
-                        </Text>
-                        <Text fontFamily={"NunitoMedium"}>
-                            (essays, articles, reports, etc)
-                        </Text>
-                    </View>
-                    <View className={"h-20 w-10/12  p-4 bg-gray-100 rounded-lg justify-center items-center"}>
-                        <Text fontFamily={"NunitoMedium"}>
-                            Engage in a conversation with Gemini to improve your english writing skills.
-                        </Text>
-                    </View>
-                    <View className={"h-20 p-4 bg-gray-100 rounded-lg justify-center items-center"}>
-                        <Text fontFamily={"NunitoMedium"}>
-                            Learn English By Chatting with Gemini
-                        </Text>
-                    </View>
-                </YStack>
-            </View>
+            <View ai={"center"} className={"h-full"} justifyContent='center' style={{ transform: [{ scaleY: -1 }] }} >
+                <View px={10}>
+                    <Text ai={"center"} textAlign='center' fontFamily={"NunitoBold"} fontSize={20} color={"black"}>
+                        Learn English By Chatting with Gemini
+                    </Text>
+                    <YStack gap={20} mt={50}>
+                        <View className={"h-20 p-4 bg-gray-100 rounded-lg justify-center items-center"}>
+                            <Text fontFamily={"NunitoMedium"} color={"black"}  >
+                                Generate all the text that you want.
+                            </Text>
+                            <Text fontFamily={"NunitoMedium"} color={"black"} >
+                                (essays, articles, reports, etc)
+                            </Text>
+                        </View>
+                        <View className={"h-20  p-4 bg-gray-100 rounded-lg justify-center items-center"}>
+                            <Text fontFamily={"NunitoMedium"} color={"black"} >
+                                Engage in a conversation with Gemini to improve your english writing skills.
+                            </Text>
+                        </View>
+                        <View className={"h-20 p-4 bg-gray-100 rounded-lg justify-center items-center"}>
+                            <Text fontFamily={"NunitoMedium"} color={"black"} >
+                                Learn English By Chatting with Gemini
+                            </Text>
+                        </View>
+                    </YStack >
+                </View>
+            </View >
         )
     }
 
@@ -336,18 +363,20 @@ export default function Chat() {
                         paddingHorizontal: 15,
                         backgroundColor: onFocus ? "#fff" : "#fff",
                         borderRadius: 10,
-                        borderColor: onFocus ? "#034ad9" : "#c0c0c0",
+                        borderColor: onFocus ? "#098756" : "#c0c0c0",
                         borderWidth: 1,
                         width: "100%",
                         minHeight: 40,
+                        marginTop: 10,
+                        marginBottom: 10
 
                     }}
                 ></Composer>
                 <Send {...props} >
                     <View style={{ justifyContent: 'center', height: '100%', marginRight: 10 }}>
                         <Ionicons
-                            name='send'
-                            size={24}
+                            name='send-sharp'
+                            size={30}
                             color={"black"}
                         />
                     </View>
@@ -363,19 +392,22 @@ export default function Chat() {
         )
     }
 
+    const keyboardShouldPersistTaps = 'never'
+
     const multiline = true
     const renderAvatarOnTop = true
     return (
 
-        <View style={{ width }} bg={"white"} className={"h-full"} >
+        <View style={{ width }} bg={"white"} className={"h-full"} pb={isKeyboardVisible ? 0 : moderateVerticalScale(60)} >
             <GiftedChat
                 textInputStyle={{ fontFamily: "NunitoBold" }}
                 messageContainerRef={chatRef}
-                {...{ messages, onSend, multiline, renderSend, user, inverted, renderMessageText, renderAvatar, scrollToBottom, renderTime, placeholder, renderChatEmpty, renderDay, renderBubble, renderFooter, renderComposer, renderAvatarOnTop }} listViewProps={{
-                    inverted: messages.length <= 0,
+                {...{ messages, onSend, multiline, renderSend, keyboardShouldPersistTaps, user, inverted, renderMessageText, renderAvatar, scrollToBottom, renderTime, placeholder, renderChatEmpty, renderDay, renderBubble, renderFooter, renderComposer, renderAvatarOnTop }} listViewProps={{
+                    /*   inverted: messages.length <= 0, */
                     showsVerticalScrollIndicator: false
                 }}
             />
+
         </View >
 
 
@@ -385,7 +417,7 @@ export default function Chat() {
 
 const styles = StyleSheet.create({
     body: {
-        fontFamily: "Nunito",
-        fontSize: 17
+        fontFamily: "NunitoMedium",
+        fontSize: 17,
     }
 })

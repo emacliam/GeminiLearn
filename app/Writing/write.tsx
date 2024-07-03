@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, View, Pressable, ScrollView, TextInput, KeyboardAvoidingView, SafeAreaView, Button, Dimensions } from 'react-native';
+import { Image, StyleSheet, Platform, Pressable, ScrollView, TextInput, KeyboardAvoidingView, SafeAreaView, Button, Dimensions } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -11,7 +11,9 @@ import * as Speech from 'expo-speech';
 import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 import ActionSheet from "react-native-actions-sheet";
-import { Text } from 'tamagui';
+import { Text, View } from 'tamagui';
+import img from "../../assets/images/gemini.jpg"
+import { Avatar } from 'react-native-gifted-chat';
 
 export default function Notes() {
     const insets = useSafeAreaInsets()
@@ -59,9 +61,10 @@ export default function Notes() {
                 <Pressable className="" onPress={() => {
                     ask1()
                 }}>
-                    <View className="flex-row items-center justify-center h-8 px-4 bg-blue-600 rounded-full">
-                        <ThemedText className="font-bold text-white">
-                            Submit
+                    <View className="flex-row items-center justify-center h-8 px-4 bg-black rounded-full">
+
+                        <ThemedText className=" text-white font-[NunitoBold]">
+                            Review Your Work
                         </ThemedText>
                     </View>
                 </Pressable>
@@ -81,31 +84,36 @@ export default function Notes() {
                     autoSize
                     ref={_editor}
 
+
                     quill={
                         {
                             placeholder: "Start Writing ... ",
                             theme: "snow"
                         }
                     }
-                    onTextChange={(text) => {
-                        setMessage(text)
+                    onTextChange={async (text) => {
+
+                        let txt = await _editor.getText()
+                        setMessage(txt)
                     }}
                 />
                 <View>
-                    <Text fontSize={15} fontWeight={"300"} color={"$gray11"} fontFamily={"NunitoMedium"}>NOTE: If you go back, what you have written will be lost</Text>
+                    <Text fontSize={15} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>NOTE: If you go back, what you have written will be lost</Text>
                 </View>
             </View>
 
 
-            <ActionSheet ref={actionSheetRef} gestureEnabled={true} containerStyle={{ height: Dimensions.get("screen").height - 100 }}>
-                <Text fontSize={20} m={10} color={"$black"} fontFamily={"NunitoBold"}>Gemini Evaluation</Text>
-                {generating && <View className="flex-col items-center justify-center p-10 h-100">
-                    <Text fontSize={16} m={10} color={"$gray11"} fontFamily={"NunitoBold"}>Gemini is evaluating your work</Text>
+            <ActionSheet ref={actionSheetRef} gestureEnabled={true} containerStyle={{ height: Dimensions.get("screen").height - 100, backgroundColor: "#098756" }}>
+                <Text fontSize={20} m={10} color={"white"} fontFamily={"NunitoBold"}>Gemini Evaluation 🤔</Text>
+                <View bg={"white"} className='h-full'>
+                    {generating && <View className="flex-col items-center justify-center p-10 h-100">
+                        <Text fontSize={16} m={10} color={"black"} fontFamily={"NunitoBold"}>Gemini is evaluating your work</Text>
+                    </View>
+                    }
+                    {generating == false && <Markdown style={styles} >
+                        {response}
+                    </Markdown>}
                 </View>
-                }
-                {generating == false && <Markdown style={styles} >
-                    {response}
-                </Markdown>}
 
             </ActionSheet>
 
@@ -126,7 +134,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     body: {
-        fontFamily: "Nunito",
+        fontFamily: "NunitoMedium",
         fontSize: 17,
         padding: 10
     }

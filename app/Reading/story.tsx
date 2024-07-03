@@ -37,7 +37,7 @@ export default function Story() {
 
 const styles = StyleSheet.create({
     body: {
-        fontFamily: "Nunito",
+        fontFamily: "NunitoMedium",
         fontSize: 17,
         paddingBottom: 100
     },

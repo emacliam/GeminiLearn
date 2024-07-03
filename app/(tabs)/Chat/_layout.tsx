@@ -21,7 +21,7 @@ export default function GamesLayout() {
                 title: "Chat With Gemini",
                 headerTitleStyle: { fontFamily: "NunitoBold" },
                 drawerLabel: "",
-                drawerHideStatusBarOnOpen: true,
+                drawerHideStatusBarOnOpen: false,
                 drawerItemStyle: { display: 'none' },
                 headerRight: () => {
                     return (
