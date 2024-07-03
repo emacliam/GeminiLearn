@@ -5,8 +5,8 @@ import { View, TextInput, StyleSheet, Text, Button } from 'react-native';
 
 let level = 0;
 
-const generateInitialGrid = (crosswordData) => {
-    const initialGrid = Array(7).fill(0).map(() => Array(8).fill('X'));
+const generateInitialGrid = (crosswordData, cols, rows) => {
+    const initialGrid = Array(cols).fill(0).map(() => Array(rows).fill('X'));
     crosswordData[level].forEach(({ answer, startx, starty, orientation }) => {
         let x = startx - 1;
         let y = starty - 1;
@@ -22,8 +22,8 @@ const generateInitialGrid = (crosswordData) => {
     return initialGrid;
 };
 
-const generateAnswerGrid = (crosswordData) => {
-    const answerGrid = Array(7).fill(0).map(() => Array(8).fill('X'));
+const generateAnswerGrid = (crosswordData, cols, rows) => {
+    const answerGrid = Array(cols).fill(0).map(() => Array(rows).fill('X'));
     crosswordData[level].forEach(({ answer, startx, starty, orientation }) => {
         let x = startx - 1;
         let y = starty - 1;
@@ -40,11 +40,15 @@ const generateAnswerGrid = (crosswordData) => {
 };
 
 
-const CrosswordGrid = ({ crosswordData }) => {
-    const [grid, setGrid] = useState(generateInitialGrid(crosswordData));
+const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
+    console.log(crosswordData)
+    console.log("cols", cols)
+    console.log("cols", rows)
+    const [grid, setGrid] = useState(generateInitialGrid(crosswordData, cols, rows));
+
 
     useEffect(() => {
-        setGrid(generateInitialGrid(crosswordData));
+        setGrid(generateInitialGrid(crosswordData, cols, rows));
     }, [crosswordData]);
 
     const handleInputChange = (row, col, text) => {
@@ -55,11 +59,11 @@ const CrosswordGrid = ({ crosswordData }) => {
 
     const handleGenerate = () => {
         level = (level + 1) % 2;
-        setGrid(generateInitialGrid(crosswordData));
+        setGrid(generateInitialGrid(crosswordData, cols, rows));
     };
 
     const handleVerify = () => {
-        const answerGrid = generateAnswerGrid(crosswordData);
+        const answerGrid = generateAnswerGrid(crosswordData, cols, rows);
         const isCorrect = JSON.stringify(grid) === JSON.stringify(answerGrid);
         if (isCorrect) {
             alert('Congratulations! Your crossword is correct.');
@@ -69,11 +73,11 @@ const CrosswordGrid = ({ crosswordData }) => {
     };
 
     const handleReset = () => {
-        setGrid(generateInitialGrid(crosswordData));
+        setGrid(generateInitialGrid(crosswordData, cols, rows));
     };
 
     const handleSolve = () => {
-        const answerGrid = generateAnswerGrid(crosswordData);
+        const answerGrid = generateAnswerGrid(crosswordData, cols, rows);
         setGrid(answerGrid);
     };
 
@@ -114,7 +118,6 @@ const CrosswordGrid = ({ crosswordData }) => {
 
     const renderQuestions = () => {
         const questions = { across: [], down: [] };
-        console.log("jjjjjjjjjj", crosswordData)
         crosswordData[level].forEach(({ hint, orientation, position }) => {
             const questionText = `${position}. ${hint}`;
             questions[orientation].push(
@@ -156,7 +159,7 @@ const CrosswordGrid = ({ crosswordData }) => {
             <View style={styles.buttonContainer}>
                 <Button color={'#228B22'}
                     title="Generate"
-                    onPress={handleGenerate}
+                    onPress={ask}
                     style={styles.button} />
                 <View style={styles.gap} />
                 <Button color={'#228B22'}

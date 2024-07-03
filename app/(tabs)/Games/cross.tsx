@@ -34,7 +34,9 @@ export default function TabTwoScreen() {
     const viewCount = 2;
     const [response, setResponse] = useState("")
     const [generating, setGenerating] = useState(false)
-    const [crosswordData, setCrossWordData] = useState([])
+    const [crosswordData, setCrossWordData] = useState()
+    const [cols, setCols] = useState(0)
+    const [rows, setRows] = useState(0)
     const regexp = /\[([^\]]+)\]/g;
 
     const convertToJson = (str) => {
@@ -51,11 +53,11 @@ export default function TabTwoScreen() {
             setGenerating(true)
             const response = await ask.request(data)
             const res = convertToJson(response.response.text())
-            console.log("kkkk", res)
-
             const output = generateLayout(res)
-            setCrossWordData(output.result)
-            console.log(output.result)
+            setCols(output.cols)
+            setRows(output.rows)
+            let filtered = output.result.filter(clue => clue.orientation !== "none");
+            setCrossWordData(filtered)
 
 
             setGenerating(false)
@@ -66,9 +68,11 @@ export default function TabTwoScreen() {
     }
 
 
-    const prompt = `Generate an array of objects with random new words in the format below.
+    const prompt = `Generate an array of objects with random new words for a cross word pazzle in the format below.
      Note: I want them in a json format..
-     Note: Each word should be a maximum of 6 characters
+     Note: Each word should be a maximum of 5 characters
+     Note:The words must all have at least similiar characters at least 1 or 2
+     Note:The array should only contain 5 items
     const array = [
     {
         "answer": "TIGER",
@@ -83,7 +87,7 @@ export default function TabTwoScreen() {
         "hint": "It's a style of typeface characterized by slanted letters",
     },
     {
-        "answer": "INFINITE",
+        "answer": "INFIN",
         "hint": "It describes something boundless or limitless in extent or quantity",
     }
 
@@ -111,8 +115,11 @@ export default function TabTwoScreen() {
                 <Loading loadingText={` Generating Game Data From Gemini`} />
             </View> : <ImageBackground source={img} resizeMode='cover' className={"h-screen"}>
                 <View className={"h-full"} px={10}>
-                    {crosswordData.length > 0 && <CrosswordGrid crosswordData={[crosswordData]} />}
-
+                    {crosswordData && <CrosswordGrid crosswordData={[crosswordData]} cols={cols} rows={rows} ask={() => {
+                        ask1({
+                            text: prompt
+                        })
+                    }} />}
                 </View>
             </ImageBackground>}
 
