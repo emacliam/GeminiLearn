@@ -3,11 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, Button } from 'react-native';
 
-let level = 0;
 
 const generateInitialGrid = (crosswordData, cols, rows) => {
     const initialGrid = Array(cols).fill(0).map(() => Array(rows).fill('X'));
-    crosswordData[level].forEach(({ answer, startx, starty, orientation }) => {
+    crosswordData.forEach(({ answer, startx, starty, orientation }) => {
         let x = startx - 1;
         let y = starty - 1;
 
@@ -24,7 +23,7 @@ const generateInitialGrid = (crosswordData, cols, rows) => {
 
 const generateAnswerGrid = (crosswordData, cols, rows) => {
     const answerGrid = Array(cols).fill(0).map(() => Array(rows).fill('X'));
-    crosswordData[level].forEach(({ answer, startx, starty, orientation }) => {
+    crosswordData.forEach(({ answer, startx, starty, orientation }) => {
         let x = startx - 1;
         let y = starty - 1;
 
@@ -41,10 +40,9 @@ const generateAnswerGrid = (crosswordData, cols, rows) => {
 
 
 const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
-    console.log(crosswordData)
-    console.log("cols", cols)
-    console.log("cols", rows)
     const [grid, setGrid] = useState(generateInitialGrid(crosswordData, cols, rows));
+
+    console.log(grid)
 
 
     useEffect(() => {
@@ -55,11 +53,6 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
         const newGrid = [...grid];
         newGrid[row][col] = text.toUpperCase();
         setGrid(newGrid);
-    };
-
-    const handleGenerate = () => {
-        level = (level + 1) % 2;
-        setGrid(generateInitialGrid(crosswordData, cols, rows));
     };
 
     const handleVerify = () => {
@@ -87,7 +80,7 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
                 <View key={rowIndex} style={styles.row}>
                     {row.map((cell, colIndex) => (
                         <View key={colIndex} style={styles.cellContainer}>
-                            {crosswordData[level].map((entry) => {
+                            {crosswordData.map((entry) => {
                                 const { startx, starty, position } = entry;
                                 if (rowIndex + 1 === starty && colIndex + 1 === startx) {
                                     return (
@@ -118,7 +111,7 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
 
     const renderQuestions = () => {
         const questions = { across: [], down: [] };
-        crosswordData[level].forEach(({ hint, orientation, position }) => {
+        crosswordData.forEach(({ hint, orientation, position }) => {
             const questionText = `${position}. ${hint}`;
             questions[orientation].push(
                 <Text key={`question-${position}`} style={styles.questionText}>

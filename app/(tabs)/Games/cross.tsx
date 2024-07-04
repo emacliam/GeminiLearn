@@ -115,7 +115,7 @@ export default function TabTwoScreen() {
                 <Loading loadingText={` Generating Game Data From Gemini`} />
             </View> : <ImageBackground source={img} resizeMode='cover' className={"h-screen"}>
                 <View className={"h-full"} px={10}>
-                    {crosswordData && <CrosswordGrid crosswordData={[crosswordData]} cols={cols} rows={rows} ask={() => {
+                    {crosswordData && <CrosswordGrid crosswordData={crosswordData} cols={rows} rows={cols} ask={() => {
                         ask1({
                             text: prompt
                         })
