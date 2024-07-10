@@ -8,6 +8,7 @@ export default function GamesLayout() {
             <Stack.Screen name="wheel" options={{ title: "Spinning the wheel", headerShown: true }} />
             <Stack.Screen name="cross" options={{ title: "Cross Word", headerShown: true }} />
             <Stack.Screen name="wordCoach" options={{ title: "Word Coach", headerShown: true }} />
+            <Stack.Screen name="wordle" options={{ title: "Wordle", headerShown: true }} />
         </Stack>
     );
 }

@@ -67,7 +67,7 @@ export default function TabTwoScreen() {
         }, {
             name: "Word Coach",
             backgroundColor: "#ffe1b1",
-            link: '/Games/wordCoach',
+            link: '/Games/wordCoachIndex',
             icon: <MaterialCommunityIcons name="book-open-variant" color={"blue"} size={30} />,
             subtext: "Text Your Vocabulary",
             img: "📖"
@@ -86,6 +86,14 @@ export default function TabTwoScreen() {
             name: "Fill the blank",
             backgroundColor: "#dee9b4",
             link: '/Listening',
+            icon: <MaterialCommunityIcons name="headset" color={"blue"} size={30} />,
+            subtext: "Enhance your listening skills.",
+            img: "🔈"
+        },
+        {
+            name: "Wordle",
+            backgroundColor: "#dee9b4",
+            link: '/Games/wordle',
             icon: <MaterialCommunityIcons name="headset" color={"blue"} size={30} />,
             subtext: "Enhance your listening skills.",
             img: "🔈"
