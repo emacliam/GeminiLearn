@@ -68,6 +68,7 @@ export default function WordCoach() {
 
     const prompt = `Generate an array of objects with random item for a word coach game similar to the one below
     Note: The array must have 10 items.
+    Note:Mix in complicated words as well.
     Note:The Options should be mixed up.their order.
     Note: The Explanation should explain the meaning of the words in options in an educational manner for someone learning english
     const array = [

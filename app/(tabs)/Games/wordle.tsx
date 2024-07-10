@@ -4,6 +4,7 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Button,
+    Pressable,
 } from "react-native"
 import { View, Text } from "tamagui"
 
@@ -119,7 +120,7 @@ const defaultGuess: IGuess = {
     5: "",
 }
 
-export default function App() {
+export default function Wordle() {
     const [activeWord, setActiveWord] = React.useState(words[0])
     const [guessIndex, setGuessIndex] = React.useState(0)
     const [guesses, setGuesses] = React.useState<{ [key: number]: string }>(defaultGuess)
@@ -213,17 +214,19 @@ export default function App() {
             <View>
                 {gameComplete ? (
                     <View style={styles.gameCompleteWrapper}>
-                        <Text>
-                            <Text fontSize={16} fontWeight={"300"} color={"white"} fontFamily={"NunitoMedium"} >Correct Word:</Text> {activeWord}
+                        <Text fontSize={18} fontWeight={"300"} color={"black"} fontFamily={"NunitoBold"}>
+                            <Text fontSize={18} fontWeight={"300"} color={"black"} fontFamily={"NunitoBold"} >Correct Word:</Text> {activeWord}
                         </Text>
-                        <View>
-                            <Button
-                                title="Reset"
-                                onPress={() => {
-                                    setGameComplete(false)
-                                }}
-                            />
-                        </View>
+
+                        <Pressable className="" onPress={() => {
+                            setGameComplete(false)
+                        }}>
+                            <View justifyContent='center' borderRadius={30} bg={"black"} px={12} py={6}>
+                                <Text fontSize={16} fontWeight={"300"} color={"white"} fontFamily={"NunitoMedium"}>
+                                    Reset Puzzle
+                                </Text>
+                            </View>
+                        </Pressable>
                     </View>
                 ) : null}
                 <Keyboard onKeyPress={handleKeyPress} />
