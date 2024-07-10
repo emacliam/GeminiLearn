@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, Pressable, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
+import { Image, StyleSheet, Platform, Pressable, ScrollView, TextInput, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -19,6 +19,8 @@ import { Text, XStack, YStack, View } from 'tamagui';
 import LottieView from 'lottie-react-native';
 import { useVoiceRecognition } from '@/hooks/useVoiceRecognition';
 import { moderateVerticalScale } from 'react-native-size-matters';
+import rmd from "remove-markdown";
+
 
 
 export default function Speak() {
@@ -30,6 +32,41 @@ export default function Speak() {
     const { state, startRecognizing, stopRecognizing, cancelRecognizing, destroyRecognizing } = useVoiceRecognition()
     const [history, setHistory] = useState([])
     const [speaking, setSpeaking] = useState(false)
+
+
+
+    useEffect(() => {
+        const requestPermissions = async () => {
+
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+                    {
+                        title: 'Voice Recognition Permission',
+                        message: 'This app needs access to your microphone to recognize speech.',
+                        buttonNeutral: 'Ask Me Later',
+                        buttonNegative: 'Cancel',
+                        buttonPositive: 'OK',
+                    }
+                );
+                if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log('RECORD_AUDIO permission denied');
+                }
+            } catch (err) {
+                console.warn(err);
+            }
+        };
+
+        requestPermissions();
+    }, []);
+
+    useEffect(() => {
+        if (state.results.length > 0) {
+            stopRecognizing()
+            ask1()
+        }
+    }, [state.results]);
+
 
 
     const speak = (word) => {
@@ -44,6 +81,7 @@ export default function Speak() {
     const stopSpeaking = () => {
         Speech.stop()
         setSpeaking(false)
+        animation.current?.reset();
     }
 
 
@@ -59,7 +97,7 @@ export default function Speak() {
         try {
             setGenerating(true)
             setResponse("")
-            const msg = `${state.results}, Note: Remove emojis or any special characters`
+            const msg = `${state.results[0]}, Note: Remove emojis or any special characters from your response`
             var response = ""
             if (history.length > 0) {
                 response = await ask.multiconvo(history, msg)
@@ -86,11 +124,20 @@ export default function Speak() {
                 }]
             }])
             destroyRecognizing()
-            speak(response)
+            const plain = rmd(response, {
+                stripListLeaders: true,
+                listUnicodeChar: '',
+                gfm: true,
+                useImgAltText: true
+            })
+            speak(plain.replace(/[*_~`]/g, '').trim())
         } catch (error) {
             console.log(error)
         }
     }
+
+
+
 
 
     return (
@@ -101,57 +148,70 @@ export default function Speak() {
                     <View className={"h-0 border-[1px] border-black-600 flex-1"}></View>
                     <View className="items-center px-2 text-center bg-black border-2 rounded-full">
                         {state.isRecording && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Go ahead i'm listening</Text>}
-                        {state.isRecording == false && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Press and Hold the mic</Text>}
+                        {state.isRecording == false && generating == false && speaking == false && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Press and Start Speaking</Text>}
+                        {generating && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Getting response</Text>}
+                        {speaking && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>AI is speaking</Text>}
                     </View>
                     <View className={"h-0 border-[1px] flex-1 border-black-600"}></View>
                 </XStack>
                 <View className="flex-1" ai={"center"}>
-                    {speaking ? <LottieView
+                    {speaking && <LottieView
                         autoPlay
                         ref={animation}
                         style={{
                             width: 300,
                             height: 300,
                             backgroundColor: "white",
-
                         }}
                         // Find more Lottie files at https://lottiefiles.com/featured
                         source={require("../../../assets/animations/geminitalk.json")}
-                    /> : <LottieView
+                    />}
+                    {generating && <LottieView
+                        autoPlay
                         ref={animation}
                         style={{
-                            width: state.isRecording ? 200 : 300,
-                            height: state.isRecording ? 200 : 300,
+                            width: 200,
+                            height: 200,
                             backgroundColor: "white",
-
                         }}
                         // Find more Lottie files at https://lottiefiles.com/featured
                         source={require("../../../assets/animations/geminiTalk2.json")}
                     />}
-
                     <View className="">
-                        <Text ai={"center"} fontSize={25} m={10} color={"black"} fontFamily={"NunitoBold"}>{state.results}</Text>
+                        <Text ai={"center"} fontSize={25} m={10} color={"black"} fontFamily={"NunitoBold"}>{state.results[0]}</Text>
                     </View>
 
                 </View>
                 <View className={"w-full px-10"}>
                     <XStack justifyContent='center'>
-                        {speaking == false && <Pressable
-                            onPressIn={() => {
-                                startRecognizing()
-                                animation.current?.play()
-                            }}
-                            onPressOut={() => {
-                                stopRecognizing()
-                                animation.current?.reset();
+                        {speaking == false && state.isRecording == false && generating == false && <XStack>
+                            <Pressable
+                                onPressIn={() => {
+                                    startRecognizing()
+                                }}
+                            >
+                                <Ionicons name="mic-circle-outline" size={80} color={"#098756"} />
+                            </Pressable>
 
-                                if (state.results.length > 0) {
-                                    ask1()
-                                }
-                            }}
-                        >
-                            <Ionicons name="mic-circle-outline" size={80} color={"#098756"} />
-                        </Pressable>}
+
+                        </XStack>}
+
+                        {speaking == false && state.isRecording == true && <XStack>
+                            <Pressable
+
+                                onPressIn={() => {
+                                    cancelRecognizing()
+                                    stopRecognizing()
+                                    destroyRecognizing()
+                                }}
+                            >
+                                <View className="px-4 py-1 border-4 border-[#098756] rounded-full">
+                                    <Text ai={"center"} fontSize={25} color={"#098756"} fontFamily={"NunitoBold"}>Stop</Text>
+                                </View>
+                            </Pressable>
+
+
+                        </XStack>}
                         {speaking && <Pressable onPress={() => {
                             stopSpeaking()
                         }}>

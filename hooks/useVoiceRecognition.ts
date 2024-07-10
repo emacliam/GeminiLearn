@@ -1,9 +1,11 @@
-import Voice, {
+import RCTVoice, {
   SpeechErrorEvent,
   SpeechEvents,
+  SpeechRecognizedEvent,
   SpeechResultsEvent,
-} from "@react-native-voice/voice";
+} from "@/scripts/Voice";
 import { useCallback, useEffect, useState } from "react";
+const Voice = new RCTVoice();
 
 interface IState {
   recognized: string;
@@ -41,6 +43,14 @@ export const useVoiceRecognition = () => {
     });
   }, [setState]);
 
+  const startContinuousListening = async () => {
+    try {
+      await Voice.start("en-US");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const startRecognizing = useCallback(async () => {
     resetState();
     try {
@@ -59,6 +69,7 @@ export const useVoiceRecognition = () => {
   }, []);
 
   const cancelRecognizing = useCallback(async () => {
+    console.log("speech canceled");
     try {
       await Voice.cancel();
     } catch (error) {
@@ -67,6 +78,7 @@ export const useVoiceRecognition = () => {
   }, []);
 
   const destroyRecognizing = useCallback(async () => {
+    console.log("speech destroyed");
     try {
       await Voice.destroy();
     } catch (error) {
@@ -77,6 +89,7 @@ export const useVoiceRecognition = () => {
 
   useEffect(() => {
     Voice.onSpeechStart = (e: any) => {
+      console.log("speech start");
       setState((prevState) => ({
         ...prevState,
         started: "true",
@@ -87,17 +100,22 @@ export const useVoiceRecognition = () => {
     Voice.onSpeechEnd = (e: any) => {
       setState((prevState) => ({
         ...prevState,
-        end: "true",
-        isRecording: true,
+        end: "√",
+        isRecording: false,
       }));
     };
 
     Voice.onSpeechError = (e: SpeechErrorEvent) => {
+      console.log("speech error", e.error);
       setState((prevState) => ({
         ...prevState,
         error: JSON.stringify(e.error),
         isRecording: false,
       }));
+    };
+
+    Voice.onSpeechRecognized = (e: SpeechRecognizedEvent) => {
+      setState((prevState) => ({ ...prevState, recognized: "√" }));
     };
 
     Voice.onSpeechResults = (e: SpeechResultsEvent) => {

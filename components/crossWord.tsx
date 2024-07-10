@@ -1,7 +1,8 @@
 //CrosswordGrid.js
 
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Text, Button } from 'react-native';
+import { TextInput, StyleSheet, Pressable } from 'react-native';
+import { Text, XStack, View } from 'tamagui';
 
 
 const generateInitialGrid = (crosswordData, cols, rows) => {
@@ -41,8 +42,6 @@ const generateAnswerGrid = (crosswordData, cols, rows) => {
 
 const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
     const [grid, setGrid] = useState(generateInitialGrid(crosswordData, cols, rows));
-
-    console.log(grid)
 
 
     useEffect(() => {
@@ -84,7 +83,7 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
                                 const { startx, starty, position } = entry;
                                 if (rowIndex + 1 === starty && colIndex + 1 === startx) {
                                     return (
-                                        <Text key={`digit-${position}`}
+                                        <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"} key={`digit-${position}`}
                                             style={styles.smallDigit}>
                                             {position}
                                         </Text>
@@ -114,16 +113,16 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
         crosswordData.forEach(({ hint, orientation, position }) => {
             const questionText = `${position}. ${hint}`;
             questions[orientation].push(
-                <Text key={`question-${position}`} style={styles.questionText}>
+                <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"} key={`question-${position}`} style={styles.questionText}>
                     {questionText}
                 </Text>
             );
         });
 
         return (
-            <View>
-                <View style={styles.headingContainer}>
-                    <Text style={styles.headingText}>Across</Text>
+            <View py={10}>
+                <View >
+                    <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>Across</Text>
                 </View>
                 <View style={styles.questionsContainer}>
                     {questions.across.map((question, index) => (
@@ -132,8 +131,8 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
                         </View>
                     ))}
                 </View>
-                <View style={styles.headingContainer}>
-                    <Text style={styles.headingText}>Down</Text>
+                <View >
+                    <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>Down</Text>
                 </View>
                 <View style={styles.questionsContainer}>
                     {questions.down.map((question, index) => (
@@ -149,29 +148,53 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.buttonContainer}>
-                <Button color={'#228B22'}
-                    title="Generate"
-                    onPress={ask}
-                    style={styles.button} />
-                <View style={styles.gap} />
-                <Button color={'#228B22'}
-                    title="Verify"
-                    onPress={handleVerify}
-                    style={styles.button} />
-                <View style={styles.gap} />
-                <Button color={'#228B22'}
-                    title="Reset"
-                    onPress={handleReset}
-                    style={styles.button} />
-                <View style={styles.gap} />
-                <Button color={'#228B22'}
-                    title="Solve"
-                    onPress={handleSolve}
-                    style={styles.button} />
-            </View>
-            {renderQuestions()}
+
+
+            <XStack py={10} pb={20} gap={10}>
+                <Pressable className="" onPress={() => {
+                    ask()
+                }}>
+                    <View justifyContent='center' borderRadius={30} bg={"black"} px={12} py={6}>
+                        <Text fontSize={16} fontWeight={"300"} color={"white"} fontFamily={"NunitoMedium"}>
+                            Generate
+                        </Text>
+                    </View>
+                </Pressable>
+                <Pressable className="" onPress={() => {
+                    handleVerify()
+                }}>
+                    <View justifyContent='center' borderRadius={30} bg={"black"} px={12} py={6}>
+                        <Text fontSize={16} fontWeight={"300"} color={"white"} fontFamily={"NunitoMedium"}>
+                            Verify
+                        </Text>
+                    </View>
+                </Pressable>
+                <Pressable className="" onPress={() => {
+                    handleReset()
+                }}>
+                    <View justifyContent='center' borderRadius={30} bg={"black"} px={12} py={6}>
+                        <Text fontSize={16} fontWeight={"300"} color={"white"} fontFamily={"NunitoMedium"}>
+                            Reset
+                        </Text>
+                    </View>
+                </Pressable>
+                <Pressable className="" onPress={() => {
+                    handleSolve()
+                }}>
+                    <View justifyContent='center' borderRadius={30} bg={"black"} px={12} py={6}>
+                        <Text fontSize={16} fontWeight={"300"} color={"white"} fontFamily={"NunitoMedium"}>
+                            Solve
+                        </Text>
+                    </View>
+                </Pressable>
+            </XStack>
+
+
             {renderGrid()}
+            {renderQuestions()}
+
+
+
 
         </View>
     );
@@ -179,7 +202,6 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
 
 const styles = StyleSheet.create({
     container: {
-
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -192,7 +214,7 @@ const styles = StyleSheet.create({
     cell: {
         borderWidth: 1,
         margin: 1,
-        borderColor: '#228B22',
+        borderColor: "#098756",
         width: 30,
         height: 30,
         textAlign: 'center',
@@ -224,7 +246,7 @@ const styles = StyleSheet.create({
     headingText: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#228B22',
+        color: "#098756",
         textAlign: 'center',
     },
     buttonContainer: {
@@ -234,10 +256,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     button: {
-        flex: 1, // Ensure equal width for both buttons
+        flex: 1,
+        borderRadius: 30,
+        borderWidth: 1,
+        overflow: 'hidden'
     },
     gap: {
-        width: 10, // Adjust the width as needed for the desired gap
+        width: 10,
     },
 });
 

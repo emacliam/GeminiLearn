@@ -58,6 +58,21 @@ export default function TabTwoScreen() {
 
     const cards = [
         {
+            name: "Cross Word",
+            backgroundColor: "#f7b8cb",
+            link: '/Games/cross',
+            icon: <MaterialCommunityIcons name="draw-pen" color={"blue"} size={30} />,
+            subtext: "Boost your writing with guided.",
+            img: "📝"
+        }, {
+            name: "Word Coach",
+            backgroundColor: "#ffe1b1",
+            link: '/Games/wordCoach',
+            icon: <MaterialCommunityIcons name="book-open-variant" color={"blue"} size={30} />,
+            subtext: "Text Your Vocabulary",
+            img: "📖"
+        },
+        {
             name: "Wheel Of Words",
             backgroundColor: "#fee7de",
             link: '/Games/wheel',
@@ -66,14 +81,7 @@ export default function TabTwoScreen() {
             img: "📚"
 
         },
-        {
-            name: "Guess the word",
-            backgroundColor: "#ffe1b1",
-            link: '/Reading',
-            icon: <MaterialCommunityIcons name="book-open-variant" color={"blue"} size={30} />,
-            subtext: "Generate Stories and expand.",
-            img: "📖"
-        },
+
         {
             name: "Fill the blank",
             backgroundColor: "#dee9b4",
@@ -82,14 +90,7 @@ export default function TabTwoScreen() {
             subtext: "Enhance your listening skills.",
             img: "🔈"
         },
-        {
-            name: "Cross Word",
-            backgroundColor: "#f7b8cb",
-            link: '/Games/cross',
-            icon: <MaterialCommunityIcons name="draw-pen" color={"blue"} size={30} />,
-            subtext: "Boost your writing with guided.",
-            img: "📝"
-        }
+
     ]
 
 
