@@ -35,16 +35,16 @@ export interface DuoDragDropProps {
   renderLines?: (props: { numLines: number; containerHeight: number; lineHeight: number }) => JSX.Element;
   /** Overrides the default Placeholder renderer */
   renderPlaceholder?:
-    | ((props: {
-        style: {
-          position: "absolute";
-          height: number;
-          top: number;
-          left: number;
-          width: number;
-        };
-      }) => JSX.Element)
-    | null;
+  | ((props: {
+    style: {
+      position: "absolute";
+      height: number;
+      top: number;
+      left: number;
+      width: number;
+    };
+  }) => JSX.Element)
+  | null;
   /** Allows user to modify animation of the word while it's animating. NOTE: this must be a worklet */
   animatedStyleWorklet?: DuoAnimatedStyleWorklet;
   /** Runs when the drag-and-drop has rendered */
@@ -89,7 +89,7 @@ const DuoDragDrop = React.forwardRef<DuoDragDropRef, DuoDragDropProps>((props, r
     onReady,
     onDrop,
   } = props;
-  const lineHeight = props.lineHeight || wordHeight * 1.2;
+  const lineHeight = 40;
   const lineGap = lineHeight - wordHeight;
   const [layout, setLayout] = useState<{ numLines: number; wordStyles: StyleProp<ViewStyle>[] } | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -328,7 +328,7 @@ function ComputeWordLayout({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: "relative",
+
   },
   computeWordLayoutContainer: {
     flexDirection: "row",

@@ -1,11 +1,17 @@
 import axios from "axios";
-import model from "./gemini";
+import model, { model2 } from "./gemini";
+import { ResponseSchema } from "@google/generative-ai";
 
 class Ask {
   async request(data: any) {
     const prompt = data.text;
-
     const result = await model.generateContent([prompt]);
+    return result;
+  }
+
+  async requestJson(data: any) {
+    const prompt = data.text;
+    const result = await model2.generateContent([prompt]);
     return result;
   }
 

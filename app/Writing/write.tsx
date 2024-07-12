@@ -11,9 +11,10 @@ import * as Speech from 'expo-speech';
 import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 import ActionSheet from "react-native-actions-sheet";
-import { Text, View } from 'tamagui';
+import { Text, View, XStack } from 'tamagui';
 import img from "../../assets/images/gemini.jpg"
 import { Avatar } from 'react-native-gifted-chat';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Notes() {
     const insets = useSafeAreaInsets()
@@ -103,17 +104,26 @@ export default function Notes() {
             </View>
 
 
-            <ActionSheet ref={actionSheetRef} gestureEnabled={true} containerStyle={{ height: Dimensions.get("screen").height - 100, backgroundColor: "#098756" }}>
-                <Text fontSize={20} m={10} color={"white"} fontFamily={"NunitoBold"}>Gemini Evaluation 🤔</Text>
-                <View bg={"white"} className='h-full'>
+            <ActionSheet ref={actionSheetRef} gestureEnabled={false} containerStyle={{ height: Dimensions.get("screen").height - 100, backgroundColor: "#098756" }}>
+
+                <XStack alignItems="center" mx={10} justifyContent="space-between">
+                    <Text fontSize={20} m={10} color={"white"} fontFamily={"NunitoBold"}>Gemini Evaluation 🤔</Text>
+                    <Pressable onPress={() => {
+                        actionSheetRef.current?.hide();
+                    }}>
+
+                        <Ionicons name='close-circle' size={25} color={"white"} />
+                    </Pressable>
+                </XStack>
+                <ScrollView bg={"white"} className='h-full'>
                     {generating && <View className="flex-col items-center justify-center p-10 h-100">
-                        <Text fontSize={16} m={10} color={"black"} fontFamily={"NunitoBold"}>Gemini is evaluating your work</Text>
+                        <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoBold"}>Gemini is evaluating your work</Text>
                     </View>
                     }
                     {generating == false && <Markdown style={styles} >
                         {response}
                     </Markdown>}
-                </View>
+                </ScrollView>
 
             </ActionSheet>
 
@@ -136,7 +146,8 @@ const styles = StyleSheet.create({
     body: {
         fontFamily: "NunitoMedium",
         fontSize: 17,
-        padding: 10
+        padding: 10,
+        color: "white"
     }
 })
 

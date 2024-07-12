@@ -57,6 +57,7 @@
     "react-native-actions-sheet": "^0.9.6",
     "react-native-cn-quill": "^0.7.18",
     "react-native-draggable-flatlist": "^4.0.1",
+    "react-native-event-listeners": "^1.0.7",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-gifted-chat": "^2.4.0",

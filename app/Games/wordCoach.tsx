@@ -12,7 +12,7 @@ import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
 import { Progress, ScrollView, View, Text, XStack, YStack } from 'tamagui';
 import * as Speech from 'expo-speech';
-import img from "../../../assets/images/memphis-mini.png";
+import img from "../../assets/images/memphis-mini.png";
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import LinearGradient from 'expo-linear-gradient';
 import CrosswordGrid from '@/components/crossWord';
@@ -51,12 +51,10 @@ export default function WordCoach() {
     const ask1 = async (data: any) => {
         try {
             setGenerating(true)
-            const response = await ask.request(data)
-            console.log(response.response.text())
+            const response = await ask.requestJson(data)
             const res = convertToJson(response.response.text())
             setCrossWordData(res)
             setCurrentQuestion(res[currentQuestionIndex])
-            console.log(res)
 
             setGenerating(false)
         } catch (error) {
@@ -77,24 +75,26 @@ export default function WordCoach() {
         "Answer":"Upon",
         "Explanation":"'On' and 'Upon' both indicate a state of being in contact with or supported by something.",
         "Option1":"Upon",
-        "Option1":"On"
+        "Option2":"On"
+        "Option3":"Go"
     },
      {
         "hint": "What is the antonym of "Fall"?,
         "Answer":"Rise",
         "Explanation":"'Fall' and 'Rise' are antonyms, representing opposite directions of movement.",
          "Option1":"Drop",
-        "Option1":"Rise"
+        "Option2":"Rise",
+        "Option3":"Climb"
     },
     {
         "hint": "Which word is similar to Beneficial?,
         "Answer":"Advantageous",
         "Explanation":"Beneficial means causing benefit, or advantageous. Example: Regular exercise is advantageous to health.",
         "Option1":"Charity",
-        "Option1":"Advantageous"
+        "Option2":"Advantageous"
+        "Option3:"Wrong"
     },
 ]
-
     `
 
 

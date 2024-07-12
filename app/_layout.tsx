@@ -12,6 +12,7 @@ import tamaguiConfig from '@/tamagui.config';
 import { Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { PortalProvider } from 'tamagui';
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -47,34 +48,38 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
         <ThemeProvider value={DefaultTheme}>
-          <StatusBar style="dark" />
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{
-              headerShown: false,
+          <PortalProvider shouldAddRootHost>
+            <StatusBar style="dark" />
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{
+                headerShown: false,
 
-            }} />
-            <Stack.Screen name="Grammer" options={{ headerShown: false }} />
-            <Stack.Screen name="Writing" options={{ headerShown: false }} />
-            <Stack.Screen name="Reading" options={{ headerShown: false }} />
-            <Stack.Screen name="Listening" options={{ headerShown: false }} />
-            <Stack.Screen name="newWord" options={{
-              headerShown: true, title: "Learn Word", headerBackTitle: "", headerLeft: () => {
-                return (
-
-
-                  <Pressable className={"pr-5"} onPress={() => {
-                    router.back()
-
-                  }}>
-                    <Ionicons name='arrow-back' size={30} />
+              }} />
+              <Stack.Screen name="Grammer" options={{ headerShown: false }} />
+              <Stack.Screen name="Writing" options={{ headerShown: false }} />
+              <Stack.Screen name="Reading" options={{ headerShown: false }} />
+              <Stack.Screen name="Listening" options={{ headerShown: false }} />
+              <Stack.Screen name="Games" options={{ headerShown: false }} />
+              <Stack.Screen name="newWord" options={{
+                headerShown: true, title: "Learn Word", headerBackTitle: "", headerLeft: () => {
+                  return (
 
 
-                  </Pressable>
-                )
-              }
-            }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
+                    <Pressable className={"pr-5"} onPress={() => {
+                      router.back()
+
+                    }}>
+                      <Ionicons name='arrow-back' size={30} />
+
+
+                    </Pressable>
+                  )
+                }
+              }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </PortalProvider>
+
         </ThemeProvider>
       </TamaguiProvider>
 

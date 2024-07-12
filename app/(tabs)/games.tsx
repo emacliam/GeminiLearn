@@ -13,7 +13,7 @@ import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
 import { ScrollView, View, XStack, YStack } from 'tamagui';
 import * as Speech from 'expo-speech';
-import img from "../../../assets/images/memphis-mini.png";
+import img from "../../assets/images/memphis-mini.png";
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import LinearGradient from 'expo-linear-gradient';
 

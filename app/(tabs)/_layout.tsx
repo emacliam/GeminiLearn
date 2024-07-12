@@ -66,15 +66,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Games"
+        name="games"
         options={{
           title: 'Games',
-          headerShown: false,
+          headerShown: true,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'game-controller' : 'game-controller-outline'} color={color} />
           ),
         }}
       />
+
       <Tabs.Screen
         name="Chat"
         options={{
