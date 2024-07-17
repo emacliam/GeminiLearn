@@ -51,6 +51,10 @@ export default function RootLayout() {
           <PortalProvider shouldAddRootHost>
             <StatusBar style="dark" />
             <Stack>
+              <Stack.Screen name="index" options={{
+                headerShown: false,
+
+              }} />
               <Stack.Screen name="(tabs)" options={{
                 headerShown: false,
 
