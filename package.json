@@ -27,6 +27,7 @@
     "@shopify/flash-list": "^1.6.4",
     "@tamagui/config": "^1.101.3",
     "@tamagui/core": "^1.101.3",
+    "@tamagui/lucide-icons": "^1.102.2",
     "axios": "^1.7.2",
     "d3-shape": "^3.2.0",
     "expo": "^51.0.17",

@@ -6,7 +6,7 @@ import ask from "@/services/Ask/ask";
 import Loading from "@/components/Loading";
 import img from "../../assets/images/memphis-mini.png";
 import { FunctionDeclarationSchemaType } from "@google/generative-ai";
-import { useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import ActionSheet from "react-native-actions-sheet";
 import Markdown from 'react-native-markdown-display';
@@ -25,6 +25,8 @@ const Duolingo = () => {
     const [response, setResponse] = useState("")
     const [Evaluation, setEvaluation] = useState()
     const [wordsAvailable, setWordsAvailable] = useState(false)
+    const [match, setMatch] = useState<boolean>(false)
+    const params = useLocalSearchParams()
 
     const actionSheetRef = useRef<ActionSheet>(null);
 
@@ -45,6 +47,7 @@ const Duolingo = () => {
             const words = convertedResponse.sentence.split(" ")
             setWord(shuffle(words))
             setSentence(convertedResponse.sentence)
+            console.log(convertedResponse.sentence)
             setGenerating(false)
         } catch (error) {
             console.log(error)
@@ -55,6 +58,10 @@ const Duolingo = () => {
 
     const prompt = `
 Generate a random unique sentence for english level advanced with a maximum of 20 words, and break down the words into an array of all the words in the sentence using this JSON schema:
+  Note: The items should be in this difficulty Level : ${params.difficulty}
+     Difficulty Description: ${params.difficultyContent}
+     Note: The items should be in this category : ${params.category}
+     Category Description: ${params.categoryContent}
 { "type": "object",
   "properties": {
     "sentence": {
@@ -81,8 +88,8 @@ Generate a random unique sentence for english level advanced with a maximum of 2
 
     const Evaluate = async (data: any) => {
         try {
-            const constructed = data.join("")
-
+            const constructed = data.join(" ")
+            constructed === sentence ? setMatch(true) : setMatch(false)
 
         } catch (error) {
             console.log(error)
@@ -102,13 +109,14 @@ Generate a random unique sentence for english level advanced with a maximum of 2
              I am trying to use these words  ${word} to construct this sentence:${sentence}
              Give me hints, dont complete it for me.Your response should only be hints.don't reveal the sentence.
              Also include definations ot the words to assit with their meaning
+             Note: Generate Safe Content
              
             `
             const response = await ask.request({
                 text: prompt
             })
             setResponse(response.response.text())
-            console.log(response.response.text())
+
             setGettingHint(false)
         } catch (error) {
             console.log("error", error)
@@ -156,7 +164,7 @@ Generate a random unique sentence for english level advanced with a maximum of 2
                 <ImageBackground source={img} resizeMode='cover' className={"h-screen pb-10"}>
 
                     {word.length > 0 && <ScrollView className={"h-full px-2 py-10"}>
-                        <Text fontSize={18} mb={10} fontWeight={"300"} color={"black"} fontFamily={"NunitoBold"}>Construct a sentence from the random words below</Text>
+                        <Text fontSize={18} mb={10} fontWeight={"300"} color={"black"} fontFamily={"NunitoBold"}>Use all the words below to construct a sentence</Text>
                         <XStack alignItems="center" justifyContent="space-between" mb={20}>
                             <Text fontSize={18} fontWeight={"300"} color={"black"} fontFamily={"NunitoBold"}>Too Hard?</Text>
                             <View gap={4}>
@@ -227,7 +235,7 @@ Generate a random unique sentence for english level advanced with a maximum of 2
                                 <Ionicons name='close-circle' size={25} color={"white"} />
                             </Pressable>
                         </XStack>
-                        <ScrollView bg={"white"} className='h-full'>
+                        <ScrollView className='h-full'>
                             {gettingHint && <View className="flex-col items-center justify-center p-10 h-100">
                                 <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoBold"}>Gemini is generating hints</Text>
                             </View>
@@ -245,12 +253,11 @@ Generate a random unique sentence for english level advanced with a maximum of 2
                                 <AlertDialog.Trigger asChild>
                                     <Pressable className="w-full px-4" onPress={() => {
                                         const answered = ref.current?.getAnsweredWords();
-                                        console.log(ref.current?.getWords())
                                         Evaluate(answered)
                                     }}>
                                         <View className="flex-row items-center justify-center w-full h-12 px-5 bg-black rounded-full">
                                             <Text className="font-[NunitoBold] text-white">
-                                                Evaluate
+                                                Check
                                             </Text>
 
                                         </View>
@@ -285,18 +292,26 @@ Generate a random unique sentence for english level advanced with a maximum of 2
 
                                     >
                                         <YStack space>
-                                            <AlertDialog.Title>Accept</AlertDialog.Title>
-                                            <AlertDialog.Description>
-                                                By pressing yes, you accept our terms and conditions.
-                                            </AlertDialog.Description>
+                                            {
+                                                match ?
+                                                    <AlertDialog.Description>
+                                                        Congratulations, the sentence match.Move on to the next one.
+                                                    </AlertDialog.Description> : <AlertDialog.Description>
+                                                        Sorry, the sentence is incorrect.try again. (you can use hints to help you)
+                                                    </AlertDialog.Description>
+                                            }
 
                                             <XStack space="$3" justifyContent="flex-end">
                                                 <AlertDialog.Cancel asChild>
                                                     <Button>Cancel</Button>
                                                 </AlertDialog.Cancel>
-                                                <AlertDialog.Action asChild>
-                                                    <Button theme="active">Next</Button>
-                                                </AlertDialog.Action>
+                                                {match && <AlertDialog.Action asChild>
+                                                    <Button onPress={() => {
+                                                        ask1({
+                                                            text: prompt
+                                                        })
+                                                    }} theme="active">Next</Button>
+                                                </AlertDialog.Action>}
                                             </XStack>
                                         </YStack>
                                     </AlertDialog.Content>

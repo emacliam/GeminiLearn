@@ -1,7 +1,10 @@
 //CrosswordGrid.js
 
-import React, { useState, useEffect } from 'react';
-import { TextInput, StyleSheet, Pressable } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { TextInput, StyleSheet, Pressable, Dimensions } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import Carousel from 'react-native-reanimated-carousel';
+import { moderateScale } from 'react-native-size-matters';
 import { Text, XStack, View } from 'tamagui';
 
 
@@ -75,36 +78,7 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
 
     const renderGrid = () => (
         <View>
-            {grid.map((row, rowIndex) => (
-                <View key={rowIndex} style={styles.row}>
-                    {row.map((cell, colIndex) => (
-                        <View key={colIndex} style={styles.cellContainer}>
-                            {crosswordData.map((entry) => {
-                                const { startx, starty, position } = entry;
-                                if (rowIndex + 1 === starty && colIndex + 1 === startx) {
-                                    return (
-                                        <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"} key={`digit-${position}`}
-                                            style={styles.smallDigit}>
-                                            {position}
-                                        </Text>
-                                    );
-                                }
-                                return null;
-                            })}
-                            <TextInput
-                                style={[styles.cell,
-                                grid[rowIndex][colIndex] === 'X' ? styles.staticCell : null]}
-                                value={cell}
-                                editable={grid[rowIndex][colIndex] !== 'X'}
-                                onChangeText={(text) =>
-                                    handleInputChange(rowIndex, colIndex, text)
-                                }
-                                maxLength={1}
-                            />
-                        </View>
-                    ))}
-                </View>
-            ))}
+
         </View>
     );
 
@@ -120,7 +94,7 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
         });
 
         return (
-            <View py={10}>
+            <ScrollView >
                 <View >
                     <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>Across</Text>
                 </View>
@@ -134,23 +108,34 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
                 <View >
                     <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>Down</Text>
                 </View>
-                <View style={styles.questionsContainer}>
+                <View style={styles.questionsContainer} pb={200}>
                     {questions.down.map((question, index) => (
                         <View key={`down-question-container-${index}`}>
                             {question}
                         </View>
                     ))}
                 </View>
-            </View>
+            </ScrollView>
         );
     };
 
 
+
+    const [questions, setQuestions] = useState([])
+    useEffect(() => {
+        crosswordData.forEach(({ hint, orientation, position }) => {
+            const questionText = `${orientation.toUpperCase()} | ${position}. ${hint}`;
+            setQuestions((current) => [...current, questionText])
+        });
+
+    }, [])
+
+
+
     return (
-        <View style={styles.container}>
+        <View style={styles.container} flex={1}  >
 
-
-            <XStack py={10} pb={20} gap={10}>
+            <XStack py={10} gap={10}>
                 <Pressable className="" onPress={() => {
                     ask()
                 }}>
@@ -190,13 +175,60 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
             </XStack>
 
 
-            {renderGrid()}
-            {renderQuestions()}
 
 
 
+            <View ai={"center"} justifyContent='center' mx={20} style={{ width: Dimensions.get("screen").width }} >
+                <ScrollView horizontal={true} >
+                    <View>
+                        {grid.map((row, rowIndex) => (
+                            <View key={rowIndex} style={styles.row}>
+                                {row.map((cell, colIndex) => (
+                                    <View key={colIndex} style={styles.cellContainer}>
+                                        {crosswordData.map((entry) => {
+                                            const { startx, starty, position } = entry;
+                                            if (rowIndex + 1 === starty && colIndex + 1 === startx) {
+                                                return (
+                                                    <Text fontSize={20} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"} key={`digit-${position}`}
+                                                        style={styles.smallDigit}>
+                                                        {position}
+                                                    </Text>
+                                                );
+                                            }
+                                            return null;
+                                        })}
+                                        <TextInput
+                                            style={[styles.cell,
+                                            grid[rowIndex][colIndex] === 'X' ? styles.staticCell : null]}
+                                            value={cell}
+                                            editable={grid[rowIndex][colIndex] !== 'X'}
+                                            onChangeText={(text) =>
+                                                handleInputChange(rowIndex, colIndex, text)
+                                            }
+                                            maxLength={1}
+                                        />
+                                    </View>
+                                ))}
+                            </View>
+                        ))}
+                    </View>
 
-        </View>
+                </ScrollView>
+            </View>
+
+
+
+            {/*    */}
+            <View minHeight={120} flex={1}  >
+
+                <View px={20} >
+                    {renderQuestions()}
+                </View>
+
+            </View>
+
+
+        </View >
     );
 };
 
@@ -204,6 +236,7 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
+        height: Dimensions.get("window").height
     },
     row: {
         flexDirection: 'row',
@@ -215,13 +248,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         margin: 1,
         borderColor: "#098756",
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
         textAlign: 'center',
+
     },
     staticCell: {
         borderColor: 'transparent',
-        color: 'white',
+        color: 'transparent',
     },
     smallDigit: {
         position: 'absolute',

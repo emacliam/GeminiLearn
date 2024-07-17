@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Link, router } from 'expo-router';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Image, Platform, Pressable, StatusBar, ImageBackground, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -37,7 +37,7 @@ export default function WordCoach() {
 
     const shakeAnimation = useSharedValue(0);
     const bounceAnimation = useSharedValue(1);
-
+    const params = useLocalSearchParams()
 
     const convertToJson = (str) => {
         let match;
@@ -69,6 +69,10 @@ export default function WordCoach() {
     Note:Mix in complicated words as well.
     Note:The Options should be mixed up.their order.
     Note: The Explanation should explain the meaning of the words in options in an educational manner for someone learning english
+    Note: The items should be in this difficulty Level : ${params.difficulty}
+     Difficulty Description: ${params.difficultyContent}
+     Note: The items should be in this category : ${params.category}
+     Category Description: ${params.categoryContent}
     const array = [
     {
         "hint": "What is the synonym for "On"?,
@@ -305,7 +309,7 @@ const styles = StyleSheet.create({
     explanation: {
         fontSize: 16,
         color: 'black',
-        marginVertical: 20,
+        marginBottom: 20,
     },
     nextButton: {
         backgroundColor: '#007bff',

@@ -82,14 +82,14 @@ const DuoDragDrop = React.forwardRef<DuoDragDropRef, DuoDragDropProps>((props, r
     rtl,
     gesturesDisabled,
     wordBankAlignment = "center",
-    wordGap = 4,
+    wordGap = 1,
     wordBankOffsetY = 20,
     wordHeight = 45,
     animatedStyleWorklet,
     onReady,
     onDrop,
   } = props;
-  const lineHeight = 40;
+  const lineHeight = 50;
   const lineGap = lineHeight - wordHeight;
   const [layout, setLayout] = useState<{ numLines: number; wordStyles: StyleProp<ViewStyle>[] } | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);

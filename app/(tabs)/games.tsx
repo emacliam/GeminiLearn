@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Link, router } from 'expo-router';
-import { StyleSheet, Image, Platform, Text, Pressable, StatusBar, ImageBackground } from 'react-native';
+import { StyleSheet, Platform, Text, Pressable, StatusBar, ImageBackground } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInRight } from "react-native-reanimated";
@@ -11,11 +11,18 @@ import TextGradient from '@furkankaya/react-native-linear-text-gradient';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
-import { ScrollView, View, XStack, YStack } from 'tamagui';
+import { ScrollView, View, XStack, YStack, Image } from 'tamagui';
 import * as Speech from 'expo-speech';
 import img from "../../assets/images/memphis-mini.png";
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import LinearGradient from 'expo-linear-gradient';
+import Crossword_Logo from "../../assets/images/Crossword_Logo.png";
+import Construction_Logo from "../../assets/images/Construction_Logo.png";
+import Spin_Logo from "../../assets/images/Spin_Logo.png";
+import WordCoach_Logo from "../../assets/images/WordCoach_Logo.png";
+import Wordle_Logo from "../../assets/images/Wordle_Logo.jpg";
+
+
 
 
 
@@ -45,7 +52,7 @@ export default function TabTwoScreen() {
             }}>
                 <XStack >
                     <View className="rounded-full w-[50px] h-[50px] p-2 justify-center items-center">
-                        <Text className="text-3xl">{img}</Text>
+                        <Image source={img} w={30} h={30} />
                     </View>
                     <YStack>
                         <ThemedText className="text-lg font-medium text-black" style={{ fontFamily: "NunitoBold" }}>{name}</ThemedText>
@@ -60,43 +67,43 @@ export default function TabTwoScreen() {
         {
             name: "Cross Word",
             backgroundColor: "#f7b8cb",
-            link: '/Games/cross',
+            link: '/Games/crossIndex',
             icon: <MaterialCommunityIcons name="draw-pen" color={"blue"} size={30} />,
             subtext: "Boost your writing with guided.",
-            img: "📝"
+            img: Crossword_Logo
         }, {
             name: "Word Coach",
             backgroundColor: "#ffe1b1",
-            link: '/Games/wordCoach',
+            link: '/Games/wordCoachIndex',
             icon: <MaterialCommunityIcons name="book-open-variant" color={"blue"} size={30} />,
             subtext: "Text Your Vocabulary",
-            img: "📖"
+            img: WordCoach_Logo
         },
-        {
-            name: "Wheel Of Words",
-            backgroundColor: "#fee7de",
-            link: '/Games/wheel',
-            icon: <MaterialIcons name="abc" color={"blue"} size={40} />,
-            subtext: "Master the essential rules.",
-            img: "📚"
-
-        },
+        /*         {
+                    name: "Wheel Of Words",
+                    backgroundColor: "#fee7de",
+                    link: '/Games/wheel',
+                    icon: <MaterialIcons name="abc" color={"blue"} size={40} />,
+                    subtext: "Master the essential rules.",
+                    img: Spin_Logo
+        
+                }, */
 
         {
             name: "Sentence Construction",
             backgroundColor: "#dee9b4",
-            link: '/Games/sentenceConstruction',
+            link: '/Games/sentenceConstructionIndex',
             icon: <MaterialCommunityIcons name="headset" color={"blue"} size={30} />,
             subtext: "Enhance your listening skills.",
-            img: "🔈"
+            img: Construction_Logo
         },
         {
             name: "Wordle",
-            backgroundColor: "#dee9b4",
+            backgroundColor: "#fee7de",
             link: '/Games/wordleIndex',
             icon: <MaterialCommunityIcons name="headset" color={"blue"} size={30} />,
             subtext: "Enhance your listening skills.",
-            img: "🔈"
+            img: Wordle_Logo
         },
 
     ]
