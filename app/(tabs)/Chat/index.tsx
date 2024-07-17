@@ -24,8 +24,14 @@ export default function Chat() {
     const [completedTyping, setCompletedTyping] = useState(false);
     const [chatID, setChatID] = useState(null)
     const [newMessage, setNewMessage] = useState(false)
-    const hist = useChatStore((state) => state.history)
+    const hist = useChatStore((state) => state.historyClicked)
+    const clickedID = useChatStore((state) => state.clickedID)
     const newChat = useChatStore((state) => state.newChat)
+    const chats = useChatStore((state) => state.chats)
+    const addMessage = useChatStore((state) => state.addMessage)
+    const createNewChat = useChatStore((state) => state.createNewChat)
+
+
 
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -70,24 +76,24 @@ export default function Chat() {
 
 
     useEffect(() => {
+        console.log(Object.keys(chats).length > 0)
+        if (Object.keys(chats).length > 0) {
 
-        if (Object.keys(hist).length > 0) {
+            if (clickedID) {
+                //get chats by id
+                const chatHist = chats.filter((chat) => {
+                    if (chat.id == clickedID) {
+                        return chat
+                    }
+                })
+                const historyArray = chatHist[0].history
+                // historyArray.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-
-            const historyArray = Object.keys(hist).map(key => {
-                return {
-                    ...hist[key]
-                };
-            });
-
-
-            historyArray.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            setMessages(historyArray)
-            //set message id
-            setChatID(historyArray[0]._id)
-            closeDrawer()
-
+                setMessages(historyArray)
+                //set message id
+                setChatID(clickedID)
+                closeDrawer()
+            }
         }
     }, [hist])
 
@@ -121,51 +127,21 @@ export default function Chat() {
 
 
 
-    const saveToFirebase = (message, aiResponse) => {
+    const saveToStore = (message, aiResponse, title) => {
         try {
             if (messages.length == 0) {
                 setChatID(message._id)
-                database()
-                    .ref(`/chats/${message._id}`)
-                    .set({
-                        chatTitle: message.text,
-                        chatId: message._id,
-                        history: []
-                    })
-                    .then(() => console.log('Chat Created'));
-
-                saveData(message._id, message, aiResponse)
+                createNewChat(message._id, [message, aiResponse], title)
 
             } else {
-                saveData(chatID, message, aiResponse)
+                addMessage(chatID, [message, aiResponse])
             }
         } catch (error) {
             console.log(error)
         }
 
-
     }
 
-
-    const saveData = (messageID, message, aiResponse) => {
-
-        try {
-            const newReference1 = database().ref(`/chats/${messageID}/history`).push();
-            const newReference2 = database().ref(`/chats/${messageID}/history`).push();
-
-            var promise1 = newReference1.set(message)
-            var promise2 = newReference2.set(aiResponse)
-
-            Promise.all([promise1, promise2]).then(() => {
-                console.log("history saved successfully")
-            }).catch((error) => {
-                console.log("Error pushing history", error)
-            })
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
 
     /*  role: "user",
@@ -181,6 +157,7 @@ export default function Chat() {
 
             const history = []
             var response = null
+            var title = ""
 
             if (messages.length > 0) {
                 messages.forEach(element => {
@@ -205,7 +182,12 @@ export default function Chat() {
                 }
 
                 let res = await ask.request(data)
+                let resTitle = await ask.request({
+                    text: `give me a 5 word summary of this statement: ${msg[0].text}`
+                })
+
                 response = res.response.text()
+                title = resTitle.response.text()
             }
 
 
@@ -225,7 +207,8 @@ export default function Chat() {
 
             setNewMessage(true)
             setMessages([...messages, messageText, aiResponse])
-            saveToFirebase(messageText, aiResponse)
+
+            saveToStore(messageText, aiResponse, title)
 
 
         } catch (error) {

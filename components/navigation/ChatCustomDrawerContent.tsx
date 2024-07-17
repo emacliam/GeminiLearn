@@ -10,30 +10,13 @@ import useChatStore from '@/Storage/Zustand/chat';
 
 const CustomDrawerContent = (props) => {
     const { height } = Dimensions.get('window')
-    let [chats, setChats] = useState([])
+    const chats = useChatStore((state) => state.chats)
+    const clearChat = useChatStore((state) => state.clearChat)
+    const openHistoryChat = useChatStore((state) => state.openHistoryChat)
 
 
-    useEffect(() => {
-        const onValueChange = database()
-            .ref('/chats')
-            .on('value', snapshot => {
-                if (snapshot.val()) {
-                    const chatsArray = Object.keys(snapshot.val()).map(key => {
 
-                        return {
-                            ...snapshot.val()[key]
-                        };
-                    });
-                    setChats(chatsArray)
-                }
 
-            });
-
-        // Stop listening for updates when no longer required
-        return () => database().ref(`/chats`).off('value', onValueChange);
-    }, []);
-
-    const toChat = useChatStore((state) => state.openRecentActivity)
 
 
     return (
@@ -52,13 +35,11 @@ const CustomDrawerContent = (props) => {
 
                             return (
                                 <TouchableOpacity onPress={() => {
-                                    toChat(item.history)
-
-                                    //router.replace("/Chat")
+                                    openHistoryChat(item.id)
                                 }}>
-                                    <XStack key={item.chatId} gap={15} alignItems="center">
+                                    <XStack key={item.id} gap={15} alignItems="center">
                                         <Ionicons name='chatbox-outline' size={20} />
-                                        <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"} color={"black"}>{item.chatTitle}</Text>
+                                        <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"} color={"black"}>{item.title.substring(0, 20) + '...'}</Text>
                                     </XStack>
                                 </TouchableOpacity>
                             )
@@ -77,7 +58,7 @@ const CustomDrawerContent = (props) => {
                 </YStack>
 
                 <YStack style={{ padding: 20 }} gap={15} flex={1} >
-                    <TouchableOpacity onPress={() => { }} >
+                    <TouchableOpacity onPress={() => { clearChat() }} >
                         <XStack gap={15} alignItems="center">
                             <Ionicons name='trash-bin-outline' size={20} />
                             <Text style={{ fontSize: 16 }} fontFamily={"NunitoMedium"} color={"black"}>Clear Conversations</Text>

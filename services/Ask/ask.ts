@@ -27,6 +27,41 @@ class Ask {
     return result.response.text();
   }
 
+  async requestChat(data: any) {
+    const prompt = data.text;
+    model.systemInstruction = {
+      role: "user",
+      parts: [
+        {
+          text: "You are here to assit me with learning english",
+        },
+      ],
+    };
+
+    const result = await model.generateContent([prompt]);
+    return result;
+  }
+
+  async multiconvoChat(history: any, msg) {
+    model.systemInstruction = {
+      role: "user",
+      parts: [
+        {
+          text: "You are here to assit me with learning english",
+        },
+      ],
+    };
+    const chat = model.startChat({
+      history,
+      generationConfig: {
+        maxOutputTokens: 100,
+      },
+    });
+
+    const result = await chat.sendMessage(msg);
+    return result.response.text();
+  }
+
   async multimedia(data: any) {
     const prompt = data.text;
     const image = {

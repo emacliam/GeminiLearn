@@ -122,7 +122,7 @@ export default function TabTwoScreen() {
     return (
         <View top={inserts.top}>
             <ImageBackground source={img} resizeMode='cover'>
-                <View mt={10} px={12} ai={'center'}>
+                <View mt={0} px={12} ai={'center'}>
                     <TextGradient
                         style={{ fontSize: 30, fontFamily: "NunitoBold" }}
                         locations={[0, 1]}
@@ -135,14 +135,14 @@ export default function TabTwoScreen() {
                 <ScrollView >
                     <View className="h-screen px-2">
 
-                        <View className="h-auto px-4 py-3 mx-2 mt-4 bg-[#098756]  shadow-sm rounded-2xl shadow-blue-200 ">
+                        <View className="h-auto px-4 py-1 mx-2 mt-4 bg-[#098756] space-y-0  shadow-sm rounded-2xl shadow-blue-200 ">
 
                             {/*                 <ImageBackground source={newWordImage} resizeMode='cover' style={{ flex: 1, padding: 10, justifyContent: 'center' }}> */}
                             <XStack alignItems='center' justifyContent='space-between'>
                                 <ThemedText className="text-xl text-white font-[NunitoBold]">
                                     Learn a new word  🧠
                                 </ThemedText>
-                                <Pressable className="mt-2 " onPress={() => {
+                                <Pressable className="mt-0 " onPress={() => {
                                     ask1(
                                         {
                                             text: newWordPrompt
@@ -172,7 +172,7 @@ export default function TabTwoScreen() {
 
 
                             </XStack>
-                            <Pressable className="mt-2 " onPress={() => {
+                            <Pressable className="mb-2 " onPress={() => {
                                 router.push({
                                     pathname: "/newWord",
                                     params: {

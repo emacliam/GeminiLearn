@@ -19,6 +19,7 @@
     "@expo/vector-icons": "^14.0.0",
     "@furkankaya/react-native-linear-text-gradient": "^1.0.2",
     "@google/generative-ai": "^0.13.0",
+    "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-firebase/app": "^20.1.0",
     "@react-native-firebase/database": "^20.1.0",
     "@react-native-masked-view/masked-view": "0.3.1",
