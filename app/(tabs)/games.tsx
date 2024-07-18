@@ -50,13 +50,13 @@ export default function TabTwoScreen() {
             <Pressable className="flex-1 h-auto p-3 mx-2 shadow-sm rounded-2xl" style={{ backgroundColor }} onPress={() => {
                 router.push(href)
             }}>
-                <XStack >
+                <XStack alignItems='center' gap={15}>
                     <View className="rounded-full w-[50px] h-[50px] p-2 justify-center items-center">
                         <Image source={img} w={30} h={30} />
                     </View>
                     <YStack>
                         <ThemedText className="text-lg font-medium text-black" style={{ fontFamily: "NunitoBold" }}>{name}</ThemedText>
-                        <ThemedText type="subtitle" className="text-black text-[15px] font-normal mt-1" style={{ fontFamily: "NunitoMedium" }}>{subtext}</ThemedText>
+                        {/*             <ThemedText type="subtitle" className="text-black text-[15px] font-normal mt-1" style={{ fontFamily: "NunitoMedium" }}>{subtext}</ThemedText> */}
                     </YStack>
                 </XStack>
             </Pressable>
@@ -76,7 +76,7 @@ export default function TabTwoScreen() {
             backgroundColor: "#ffe1b1",
             link: '/Games/wordCoachIndex',
             icon: <MaterialCommunityIcons name="book-open-variant" color={"blue"} size={30} />,
-            subtext: "Text Your Vocabulary",
+            subtext: "Test Your Vocabulary",
             img: WordCoach_Logo
         },
         /*         {

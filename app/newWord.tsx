@@ -24,14 +24,6 @@ export default function Notes() {
     const richText = useRef();
 
 
-
-    const editor = useEditorBridge({
-        autofocus: true,
-        avoidIosKeyboard: true,
-        initialContent: 'Start editing!',
-    });
-
-
     const ask1 = async (data: any) => {
         try {
             setGenerating(true)

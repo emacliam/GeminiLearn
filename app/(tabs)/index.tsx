@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Link, router } from 'expo-router';
-import { StyleSheet, Image, Platform, Text, Pressable, StatusBar, ImageBackground } from 'react-native';
+import { StyleSheet, Image, Platform, Text, Pressable, StatusBar, ImageBackground, TextInput } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInRight } from "react-native-reanimated";
@@ -11,7 +11,7 @@ import TextGradient from '@furkankaya/react-native-linear-text-gradient';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import ask from '@/services/Ask/ask';
 import Markdown from 'react-native-markdown-display';
-import { ScrollView, View, XStack } from 'tamagui';
+import { Button, Input, ScrollView, View, XStack } from 'tamagui';
 import * as Speech from 'expo-speech';
 import img from "../../assets/images/memphis-mini.png";
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
@@ -21,19 +21,21 @@ import LinearGradient from 'expo-linear-gradient';
 
 export default function TabTwoScreen() {
     const inset = useSafeAreaInsets()
-
-    const [snapDirection, setSnapDirection] = useState<"left" | "right">(
-        "left",
-    );
-    const [pagingEnabled, setPagingEnabled] = useState<boolean>(true);
-    const [snapEnabled, setSnapEnabled] = useState<boolean>(true);
-
-    const [autoPlayReverse, setAutoPlayReverse] = useState<boolean>(false);
-    const data = useRef<number[]>([...new Array(6).keys()]).current;
-    const viewCount = 2;
-
     const [response, setResponse] = useState("")
     const [generating, setGenerating] = useState(false)
+    const [search, setSearch] = useState("")
+    const [showButton, setShowButton] = useState(false)
+
+
+    useEffect(() => {
+        if (search !== "") {
+            setShowButton(true)
+        } else {
+            setShowButton(false)
+
+        }
+    }, [search])
+
     const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
 
@@ -186,7 +188,28 @@ export default function TabTwoScreen() {
                             </Pressable>
                         </View>
 
-                        <View className="w-full mt-4 border-black border-3" >
+                        <XStack mt={10} px={10} alignItems='center' gap={10}>
+
+
+                            <Input onChangeText={text => {
+                                setSearch(text)
+
+                            }} h={40} flex={1} placeholderTextColor={"gray"} placeholder='Search for a word ... '
+                                className={"p-2 bg-white  text-[15px] text-black rounded-[10px] border-[1px] border-gray-300 focus:border-[#098756]"}></Input>
+                            {showButton && <Button h={40} onPress={() => {
+
+                                router.push({
+                                    pathname: "/newWord",
+                                    params: {
+                                        word: search
+                                    }
+                                })
+
+                            }}>Search</Button>}
+
+                        </XStack>
+
+                        <View className="w-full mt-2 border-black border-3" >
                             <FlatList showsVerticalScrollIndicator={false} contentContainerStyle={{ rowGap: 15, paddingBottom: 60 }} numColumns={2} data={cards} renderItem={({ item, index }) => {
                                 return (
                                     <Card href={item.link} backgroundColor={item.backgroundColor} name={item.name} icon={item.icon} subtext={item.subtext} img={item.img} />

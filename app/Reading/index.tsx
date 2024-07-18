@@ -14,7 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import ask from '@/services/Ask/ask';
 import Loading from '@/components/Loading';
-import { Text, View } from 'tamagui';
+import { Button, Text, TextArea, View } from 'tamagui';
 
 export default function TabTwoScreen() {
     const GenreList = [
@@ -153,15 +153,15 @@ export default function TabTwoScreen() {
                     <Text fontSize={18} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>Learn vocabulary and comprehension from AI generated stories.</Text>
 
 
-                    <TextInput onChangeText={text => { setDescription(text) }} placeholderTextColor={"black"} placeholder='Write a story idea / description' multiline={true}
-                        numberOfLines={4} className={"min-h-[80] p-2 bg-white text-[15px] rounded-[10px] border-[1px] border-gray-900"}></TextInput>
+                    <TextArea mt={10} color={"black"} onChangeText={text => { setDescription(text) }} placeholderTextColor={"black"} placeholder='Write a story idea / description'
+                        className={" p-2 bg-white text-[15px] rounded-[10px] border-[1px] border-gray-900"}></TextArea>
 
-                    {!image && <Pressable onPress={pickImage}>
-                        <View className="flex-row items-center justify-center p-2 space-x-4 border-[1px] border-gray-900 rounded-lg">
-                            <Ionicons name="cloud-upload" size={30} color={"#098756"} />
-                            <Text style={{ fontFamily: "Nunito" }} mx={10} className="text-[15px] font-normal text-gray-900" style={{ fontFamily: "NunitoRegular" }}>Add Image (Optional)</Text>
+                    {!image && <Button bg={"$blue10Light"} onPress={pickImage}>
+                        <View className="flex-row items-center justify-center flex-1 p-2 space-x-4">
+                            <Ionicons name="cloud-upload" size={30} color={"white"} />
+                            <Text style={{ fontFamily: "Nunito" }} mx={10} className="text-[15px] font-normal text-white" style={{ fontFamily: "NunitoRegular" }}>Add Image (Optional)</Text>
                         </View>
-                    </Pressable>}
+                    </Button>}
                     {image && <Image source={{ uri: image }} style={{
                         width: 200,
                         height: 200
@@ -210,7 +210,7 @@ export default function TabTwoScreen() {
                 </View>}
 
             </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
 
 
 

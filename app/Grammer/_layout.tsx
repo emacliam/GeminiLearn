@@ -21,6 +21,10 @@ export default function GrammerLayout() {
         }}>
             <Stack.Screen name="index" options={{ title: "Grammer", headerShown: true }} />
             <Stack.Screen name="notes" options={{ title: "Notes", headerShown: true }} />
+            <Stack.Screen name="test" options={{ title: "Test", headerShown: true }} />
+            <Stack.Screen name="testResults" options={{ title: "Results", headerShown: true }} />
+
+
         </Stack>
     );
 }

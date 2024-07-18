@@ -32,7 +32,12 @@ export default function Notes() {
     useEffect(() => {
         setGenerating(true)
         ask1({
-            text: `Generate a lot of comprehensive notes on this topic to read: ${params.name}`
+            text: `${params.data}
+            Note: SelectedAnswer is the answer that was selected by the user
+            Note: CorrectAnswer is the correct answer for the question
+            Note: Question is the asked question
+            Mark this test, the selectedAnswers, give a score and feedback to help the user learn.
+            `
         })
     }, [])
 
@@ -44,15 +49,12 @@ export default function Notes() {
                 <Button className="pt-0 pb-0 " borderRadius={30} h={30} onPress={() => {
 
                     router.push({
-                        pathname: "/Grammer/test",
-                        params: {
-                            data: response
-                        }
+                        pathname: "/Grammer",
                     })
                 }}>
 
                     <Text className="font-[NunitoBold] text-white">
-                        Take A Test
+                        Done
                     </Text>
 
                 </Button>
@@ -70,7 +72,7 @@ export default function Notes() {
                 style={{ height: '100%' }}
             >
                 {generating && <View className="flex-col items-center justify-center flex-1 h-screen bg-white">
-                    <Loading loadingText={` Generating notes on ${params.name} from Gemini`} />
+                    <Loading loadingText={`Gemini is evaluating your answers`} />
                 </View>}
                 {generating == false &&
 
