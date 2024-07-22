@@ -41,6 +41,12 @@
           "photosPermission": "Allow access to your images, to upload."
         }
       ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
       "@react-native-firebase/app",
       [
         "expo-build-properties",

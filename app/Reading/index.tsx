@@ -140,7 +140,7 @@ export default function TabTwoScreen() {
 
         <KeyboardAvoidingView>
 
-            <ScrollView className={"bg-white "}>
+            <ScrollView className={"bg-white h-full "}>
                 {generating ? <View className="flex-col items-center justify-center flex-1 h-screen bg-white">
 
                     <Loading loadingText={` Generating story`} />
@@ -156,8 +156,8 @@ export default function TabTwoScreen() {
                     <TextArea mt={10} color={"black"} onChangeText={text => { setDescription(text) }} placeholderTextColor={"black"} placeholder='Write a story idea / description'
                         className={" p-2 bg-white text-[15px] rounded-[10px] border-[1px] border-gray-900"}></TextArea>
 
-                    {!image && <Button bg={"$blue10Light"} onPress={pickImage}>
-                        <View className="flex-row items-center justify-center flex-1 p-2 space-x-4">
+                    {!image && <Button bg={"$blue10Light"} borderRadius={30} onPress={pickImage}>
+                        <View className="flex-row items-center justify-center flex-1 p-2 space-x-4 rounded-full">
                             <Ionicons name="cloud-upload" size={30} color={"white"} />
                             <Text style={{ fontFamily: "Nunito" }} mx={10} className="text-[15px] font-normal text-white" style={{ fontFamily: "NunitoRegular" }}>Add Image (Optional)</Text>
                         </View>
@@ -197,7 +197,7 @@ export default function TabTwoScreen() {
                         })}
                     </View>
 
-                    <Pressable className="pb-10 mt-4 " onPress={() => {
+                    {image && selected.length > 0 && description !== "" && <Pressable className="pb-10 mt-4 " onPress={() => {
                         generateStory()
                     }}>
                         <View className="flex-row items-center justify-center w-full h-12 bg-black rounded-full">
@@ -206,7 +206,7 @@ export default function TabTwoScreen() {
                             </Text>
 
                         </View>
-                    </Pressable>
+                    </Pressable>}
                 </View>}
 
             </ScrollView>

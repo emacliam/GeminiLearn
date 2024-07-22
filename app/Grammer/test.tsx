@@ -34,7 +34,7 @@ export default function Notes() {
     };
 
     useEffect(() => {
-        console.log("effect called")
+
         const answered = response.every(question => question?.hasOwnProperty('SelectedAnswer'))
         setAllAnswered(answered)
 
@@ -55,6 +55,8 @@ export default function Notes() {
     const prompt = `Generate a test with 20 questions for these notes in json format using the below schema
     
     Notes: ${params.data}
+     Note: The test should be in this difficulty Level : ${params.difficulty}
+     Difficulty Description: ${params.difficultyContent}
     
     The Schema:
 [ "type": "Array",
@@ -94,7 +96,7 @@ export default function Notes() {
 
             return (
 
-                <Button disabled={allAnswered == true ? false : true} disabledStyle={{ bg: "$gray11", color: "$gray9" }} color={"white"} fontFamily={"NunitoBold"} bg={"black"} className="pt-0 pb-0 " borderRadius={30} h={30} onPress={() => {
+                <Button disabled={allAnswered == true && generating == false ? false : true} disabledStyle={{ bg: "$gray11", color: "$gray9" }} color={"white"} fontFamily={"NunitoBold"} bg={"black"} className="pt-0 pb-0 " borderRadius={30} h={30} onPress={() => {
 
                     router.push({
                         pathname: "/Grammer/testResults",

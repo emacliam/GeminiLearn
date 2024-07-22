@@ -74,6 +74,19 @@ class Ask {
     const result = await model.generateContent([prompt, image]);
     return result;
   }
+
+  async multimediaAudio(data: any) {
+    const prompt = { text: data.text };
+    const audio = {
+      inlineData: {
+        data: data.uri,
+        mimeType: "audio/wav",
+      },
+    };
+
+    const result = await model.generateContent([prompt, audio]);
+    return result;
+  }
 }
 
 export default new Ask();
