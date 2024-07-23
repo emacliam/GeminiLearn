@@ -142,13 +142,16 @@ export default function Speak() {
                 <XStack className='items-center '>
                     <View className={"h-0 border-[1px] border-black-600 flex-1"}></View>
                     <View className="items-center px-2 text-center bg-black border-2 rounded-full">
-                        {state.isRecording && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Go ahead i'm listening</Text>}
+                        {state.isRecording && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Go ahead speak i'm listening</Text>}
                         {state.isRecording == false && generating == false && speaking == false && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Press and Start Speaking</Text>}
                         {generating && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>Getting response</Text>}
                         {speaking && <Text fontSize={16} m={10} color={"white"} fontFamily={"NunitoMedium"}>AI is speaking</Text>}
                     </View>
+
                     <View className={"h-0 border-[1px] flex-1 border-black-600"}></View>
                 </XStack>
+                {state.isRecording && <Text fontSize={16} m={10} color={"black"} fontFamily={"NunitoMedium"}>Press Stop when you are done speaking</Text>}
+                {state.isRecording && <Text fontSize={16} m={10} color={"black"} fontFamily={"NunitoMedium"}>If you pose for a long time, i will stop listening </Text>}
 
 
                 <View className="flex-1" ai={"center"}>
@@ -187,7 +190,10 @@ export default function Speak() {
                                     startRecognizing()
                                 }}
                             >
-                                <Ionicons name="mic-circle-outline" size={80} color={"#098756"} />
+                                <YStack gap={1} alignItems='center'>
+                                    <Ionicons name="mic-circle-outline" size={80} color={"#098756"} />
+                                    <Text ai={"center"} fontSize={25} color={"#098756"} fontFamily={"NunitoBold"}>Start</Text>
+                                </YStack>
                             </Pressable>
 
 

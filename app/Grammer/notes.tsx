@@ -53,7 +53,7 @@ export default function Notes() {
 
                 <XStack ai={"center"} justifyContent="space-between" >
                     <AlertDialog>
-                        <AlertDialog.Trigger asChild>
+                        {generating == false && <AlertDialog.Trigger asChild>
 
                             <View className="flex-row items-center justify-center h-10 px-5 bg-black rounded-full">
                                 <Text className="font-[NunitoBold] text-white">
@@ -61,7 +61,7 @@ export default function Notes() {
                                 </Text>
                             </View>
 
-                        </AlertDialog.Trigger>
+                        </AlertDialog.Trigger>}
                         <AlertDialog.Portal>
                             <AlertDialog.Overlay
                                 key="overlay"

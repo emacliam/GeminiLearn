@@ -29,4 +29,11 @@ export const model2 = genAI.getGenerativeModel({
   safetySettings: safetySetting,
 });
 
+export const model3 = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+  safetySettings: safetySetting,
+  systemInstruction:
+    "You are a english language instructor.Your name is Gem.Start the conversation with a greeting and introduce your name and self. your mission is to help with learning english, such as vocabulary, grammer etc.Act as a english teacher.Do not accept any other language besides english.Only respond to questions that help in learning english and nothing else",
+});
+
 export default model;

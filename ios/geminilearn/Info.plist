@@ -46,13 +46,14 @@
     <key>NSCameraUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your camera</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>CUSTOM: Allow $(PRODUCT_NAME) to access the microphone</string>
+    <string>Allow $(PRODUCT_NAME) to access your microphone.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Allow access to your images, to upload.</string>
     <key>NSSpeechRecognitionUsageDescription</key>
     <string>CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech</string>
     <key>NSUserActivityTypes</key>
     <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>

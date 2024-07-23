@@ -1,11 +1,12 @@
 //CrosswordGrid.js
 
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState, useEffect, useRef } from 'react';
 import { TextInput, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Carousel from 'react-native-reanimated-carousel';
 import { moderateScale } from 'react-native-size-matters';
-import { Text, XStack, View } from 'tamagui';
+import { Text, XStack, View, Dialog, Button } from 'tamagui';
 
 
 const generateInitialGrid = (crosswordData, cols, rows) => {
@@ -42,6 +43,41 @@ const generateAnswerGrid = (crosswordData, cols, rows) => {
     return answerGrid;
 };
 
+function findWordsInGrid(grid) {
+    const rows = grid.length;
+    const cols = grid[0].length;
+    const words = [];
+
+    // Check horizontally
+    for (let r = 0; r < rows; r++) {
+        let word = '';
+        for (let c = 0; c < cols; c++) {
+            if (grid[r][c] !== 'X') {
+                word += grid[r][c];
+            } else {
+                if (word.length > 1) words.push(word);
+                word = '';
+            }
+        }
+        if (word.length > 1) words.push(word); // To capture the last word in the row
+    }
+
+    // Check vertically
+    for (let c = 0; c < cols; c++) {
+        let word = '';
+        for (let r = 0; r < rows; r++) {
+            if (grid[r][c] !== 'X') {
+                word += grid[r][c];
+            } else {
+                if (word.length > 1) words.push(word);
+                word = '';
+            }
+        }
+        if (word.length > 1) words.push(word); // To capture the last word in the column
+    }
+
+    return words;
+}
 
 const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
     const [grid, setGrid] = useState(generateInitialGrid(crosswordData, cols, rows));
@@ -58,12 +94,29 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
     };
 
     const handleVerify = () => {
+
         const answerGrid = generateAnswerGrid(crosswordData, cols, rows);
         const isCorrect = JSON.stringify(grid) === JSON.stringify(answerGrid);
+        // Find words in both grids
+        const wordsInGrid1 = findWordsInGrid(grid);
+        const wordsInGrid2 = findWordsInGrid(answerGrid);
+
+        // Find common words in both grids
+        const commonWords = wordsInGrid1.filter(word => wordsInGrid2.includes(word));
+
+        // Output the common words
+
+        setCommonWords(commonWords)
+
         if (isCorrect) {
-            alert('Congratulations! Your crossword is correct.');
+            alert('Congratulations, all words are correct');
         } else {
-            alert('Incorrect. Please try again.');
+            if (commonWords.length <= 0) {
+                alert('Incorrect, try again');
+            } else {
+                setOpen(true)
+            }
+
         }
     };
 
@@ -130,10 +183,64 @@ const CrosswordGrid = ({ crosswordData, cols, rows, ask }) => {
 
     }, [])
 
+    const [open, setOpen] = useState(false)
+    const [commonWords, setCommonWords] = useState([])
 
 
     return (
         <View style={styles.container} flex={1}  >
+
+            <Dialog open={open} onOpenChange={(open) => {
+                open ? setOpen(false) : setOpen(false)
+            }}>
+                <Dialog.Trigger />
+                <Dialog.Portal>
+                    <Dialog.Overlay key="overlay"
+                        animation="slow"
+                        opacity={0.5}
+                        enterStyle={{ opacity: 0 }}
+                        exitStyle={{ opacity: 0 }} />
+                    <Dialog.Content bordered
+                        elevate
+                        key="content"
+                        animateOnly={['transform', 'opacity']}
+                        animation={[
+                            'quicker',
+                            {
+                                opacity: {
+                                    overshootClamping: true,
+                                },
+                            },
+                        ]}
+                        enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
+                        exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+                        gap="$4">
+                        <Dialog.Title>
+                            <Text fontSize={16} fontWeight={"300"} color={"black"} fontFamily={"NunitoBold"}>
+                                Verifing Answers
+                            </Text>
+                        </Dialog.Title>
+
+                        {commonWords.length > 0 && <View >
+                            <Text fontSize={16} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>
+                                You Got {commonWords.length} words correct
+                            </Text>
+                            {commonWords.map((item, index) => {
+                                return (
+                                    <Text key={index} fontSize={16} fontWeight={"300"} color={"black"} fontFamily={"NunitoMedium"}>
+                                        {index + 1}. {item}
+                                    </Text>
+                                )
+                            })}
+                        </View>}
+                        <Dialog.Close asChild>
+                            <Button>
+                                Close
+                            </Button>
+                        </Dialog.Close>
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog>
 
             <XStack py={10} gap={10}>
                 <Pressable className="" onPress={() => {

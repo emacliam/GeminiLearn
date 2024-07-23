@@ -175,13 +175,13 @@ export default function Chat() {
 
 
             if (history.length > 0) {
-                response = await ask.multiconvo(history, msg[0].text)
+                response = await ask.multiconvoChat(history, msg[0].text)
             } else {
                 const data = {
                     text: msg[0].text
                 }
 
-                let res = await ask.request(data)
+                let res = await ask.requestChat(data)
                 let resTitle = await ask.request({
                     text: `give me a 5 word summary of this statement: ${msg[0].text}`
                 })
@@ -286,7 +286,7 @@ export default function Chat() {
     }
 
 
-    const placeholder = "Ask me anything ... "
+    const placeholder = "Ask me anything in English "
 
     const renderChatEmpty = (props) => {
         return (

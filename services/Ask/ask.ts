@@ -1,5 +1,5 @@
 import axios from "axios";
-import model, { model2 } from "./gemini";
+import model, { model2, model3 } from "./gemini";
 import { ResponseSchema } from "@google/generative-ai";
 
 class Ask {
@@ -29,29 +29,12 @@ class Ask {
 
   async requestChat(data: any) {
     const prompt = data.text;
-    model.systemInstruction = {
-      role: "user",
-      parts: [
-        {
-          text: "You are here to assit me with learning english",
-        },
-      ],
-    };
-
-    const result = await model.generateContent([prompt]);
+    const result = await model3.generateContent([prompt]);
     return result;
   }
 
   async multiconvoChat(history: any, msg) {
-    model.systemInstruction = {
-      role: "user",
-      parts: [
-        {
-          text: "You are here to assit me with learning english",
-        },
-      ],
-    };
-    const chat = model.startChat({
+    const chat = model3.startChat({
       history,
       generationConfig: {
         maxOutputTokens: 100,
